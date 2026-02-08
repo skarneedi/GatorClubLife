@@ -1,0 +1,71 @@
+Database Schema
+
+Table: users
+Stores registered users such as students, club admins, and organizers.
+
+- id
+- name → Full name of the user.
+- email → Email address.
+- role → Defines user type; can be one of the following types:
+  - admin
+  - member
+  - organizer
+- created_at → Records when the user was registered.
+- password → Password chosen by the user.
+---
+
+Table: clubs
+Stores clubs created by students.
+
+- id
+- name → Name of the club.
+- description → Brief information about the club.
+- created_by (Foreign Key → `users.id`) → The user who created the club.
+- created_at → Records when the club was created.
+- club_category → Categories for the clubs
+  - Academic & Research
+  - Professional & Career
+  - Cultural & International
+  - Arts & Performance
+  - Recreational & Hobbies
+  - Service & Volunteering
+  - Health & Wellness
+  - Social & Special Interest
+  - Faith & Spirituality
+  - Entrepreneurship & Business
+  - STEM & Innovation
+  - Sports & Athletics
+  - Government & Leadership
+  - Others / Miscellaneous
+
+Table: events
+Stores events organized by clubs.
+
+id → Unique identifier for each event.
+name → Name of the event.
+description → Brief details about the event.
+date → Event date (stored as a UNIX timestamp).
+location → Venue of the event.
+organized_by (Foreign Key → users.id) → The user who is organizing the event.
+club_id (Foreign Key → clubs.id) → The club hosting the event.
+created_at → Records when the event was created.
+Table: bookings
+Stores bookings made by users for events.
+
+id → Unique identifier for each booking.
+user_id (Foreign Key → users.id) → The user making the booking.
+event_id (Foreign Key → events.id) → The event being booked.
+status → Status of the booking; can be one of the following:
+confirmed
+pending
+cancelled
+booked_at → Records when the booking was made.
+---
+
+Table: Announcements
+Stores announcements made by admin users.
+announcement_id →	Unique identifier for each announcement.
+announcement_title → Title of the announcement.
+announcement_message → Content/body of the announcement.
+announcement_created_by	→ (Foreign Key → users.id).
+announcement_created_at → Timestamp recording when the announcement was posted.

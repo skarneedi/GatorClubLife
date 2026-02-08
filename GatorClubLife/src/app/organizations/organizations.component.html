@@ -1,0 +1,47 @@
+<!-- organizations.component.html -->
+<div class="container">
+  <div class="sidebar">
+    <h3>Filter by Categories</h3>
+    <div class="category-list">
+      <ul>
+        <li
+          *ngFor="let category of categories"
+          (click)="selectCategory(category)"
+          [class.active]="selectedCategory === category"
+        >
+          {{ category }}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <h1>Find an organization</h1>
+    <div class="search-bar">
+      <input
+        type="text"
+        placeholder="Search by either name or keyword"
+        [(ngModel)]="searchTerm"
+        (input)="applyFilters()"
+      />
+      <span class="search-icon">🔍</span>
+    </div>
+
+    <div class="organization-list">
+      <div
+        *ngFor="let org of filteredOrganizations"
+        class="organization-card"
+      >
+        <h2>{{ org.club_name }}</h2>
+        <p>{{ org.club_description }}</p>
+        <!-- Router link to the organization details page -->
+        <a
+          [routerLink]="['/organizations', org.club_id]"
+          class="view-page-link"
+        >
+          <i class="fas fa-arrow-right"></i> View page
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

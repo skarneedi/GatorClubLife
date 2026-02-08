@@ -1,0 +1,67 @@
+<div class="container">
+  <!-- Header Section -->
+  <header>
+    <h1>Welcome!</h1>
+    <div class="welcome-text">
+      <p>Submitting an event permit to Business Affairs is simple and should take no longer than 10 minutes to complete.</p>
+      <p>Permits should be applied for at least two weeks prior to the date of the event.</p>
+      <p><strong>Are you a Registered Student Organization?</strong> If you are, please use the <a href="#">Student Engagement Permit Request System</a>.</p>
+    </div>
+  </header>
+
+  <!-- Content Wrapper -->
+  <div class="content-wrapper">
+    <!-- Event Types Section -->
+    <section class="event-types">
+      <h2>Choose the type of event</h2>
+      <div class="event-options">
+        <!-- Banner Permit -->
+        <div class="event-option" (click)="navigateToForm('banner-permit')">
+          <h3>Banner Permit - BA</h3>
+          <p>This form is required for placing banners on campus.</p>
+        </div>
+        <!-- Century Tower Lighting -->
+        <div class="event-option" (click)="navigateToForm('century-tower-lighting')">
+          <h3>Century Tower Lighting - BA</h3>
+          <p>This form is required for lighting Century Tower.</p>
+        </div>
+        <!-- General Events -->
+        <div class="event-option" (click)="navigateToForm('general-events')">
+          <h3>General Events - BA</h3>
+          <p>This form is required for general events and requests to serve alcohol at events ON campus.</p>
+        </div>
+        <!-- Run/Walk -->
+        <div class="event-option" (click)="navigateToForm('run-walk')">
+          <h3>Run/Walk - BA</h3>
+          <p>This form is required for runs, walks, and biking events on campus.</p>
+        </div>
+        <!-- Select Spaces -->
+        <div class="event-option" (click)="navigateToForm('select-spaces')">
+          <h3>Select Spaces: Request to Serve Alcoholic Beverages - BA</h3>
+          <p>This form is for requests to alcoholic beverages in Select Spaces. Unless your event occurs in a Select Space, please complete the General Events form.</p>
+        </div>
+        <!-- Tabling -->
+        <div class="event-option" (click)="navigateToForm('tabling')">
+          <h3>Tabling - BA</h3>
+          <p>This form is required for tabling events.</p>
+        </div>
+        <!-- Yard Sign and Feather Banner -->
+        <div class="event-option" (click)="navigateToForm('yard-sign')">
+          <h3>Yard Sign and Feather Banner Permit - BA</h3>
+          <p>This form is required for placing yard signs and feather banners on campus.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sidebar for Type of Permit -->
+    <aside class="sidebar">
+      <h4>Type of Permit</h4>
+      <ul>
+        <li><input type="radio" name="permitType" value="basicInfo"> Basic Information</li>
+        <li><input type="radio" name="permitType" value="eventDates"> Event Dates</li>
+        <li><input type="radio" name="permitType" value="additionalForms"> Additional Forms</li>
+        <li><input type="radio" name="permitType" value="review"> Review</li>
+      </ul>
+    </aside>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="page-header-bar">
+    <h2>Review Your Submission</h2>
+    <p>Please review all the information you provided before final submission.</p>
+  </div>
+
+  <div class="main-layout">
+    <div class="review-content">
+      <h3>Basic Information</h3>
+      <p><strong>Event Name:</strong> {{ permitService.getBasicInfo()?.event_name }}</p>
+      <p><strong>Purpose:</strong> {{ permitService.getBasicInfo()?.event_description }}</p>
+      <p><strong>Expected Attendance:</strong> {{ permitService.getBasicInfo()?.expected_attendance }}</p>
+      <p><strong>Categories:</strong> {{ permitService.getBasicInfo()?.event_categories }}</p>
+
+      <hr>
+
+      <h3>Event Dates</h3>
+      <ul *ngIf="eventDates.length > 0; else noDates">
+        <li *ngFor="let date of eventDates">
+          From <strong>{{ date.start_time }}</strong> to <strong>{{ date.end_time }}</strong>
+        </li>
+      </ul>
+      <ng-template #noDates><p>No event dates provided.</p></ng-template>
+
+      <hr>
+
+      <h3>Uploaded Files</h3>
+      <ul *ngIf="uploadedFiles.length > 0; else noFiles">
+        <li *ngFor="let file of uploadedFiles">{{ file.name }}</li>
+      </ul>
+      <ng-template #noFiles><p>No files uploaded.</p></ng-template>
+
+      <hr>
+
+      <h3>Additional Notes</h3>
+      <p>{{ permitService.getNotes() || 'None provided.' }}</p>
+    </div>
+
+    <div class="sidebar-panel">
+      <div class="card">
+        <h4>Type of Permit</h4>
+        <ul class="permit-list">
+          <li><input type="radio" name="permitType" disabled> Basic Information</li>
+          <li><input type="radio" name="permitType" disabled> Event Dates</li>
+          <li><input type="radio" name="permitType" disabled> Additional Forms</li>
+          <li><input type="radio" name="permitType" checked> Review</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="navigation-bar">
+    <button class="back-button" (click)="goBack()">Back</button>
+    <button class="next-button" (click)="submitForm()">Submit</button>
+  </div>
+</div>

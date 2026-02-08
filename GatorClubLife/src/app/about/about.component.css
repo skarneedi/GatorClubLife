@@ -1,0 +1,62 @@
+/* src/app/about/about.component.css */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.about-section {
+  padding: 40px;
+  background-color: white; /* Clean background color */
+  border-radius: 12px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  margin: 60px auto;
+  text-align: center;
+  transition: all 0.3s ease; /* Smooth transition effect */
+}
+
+.about-section:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Slight shadow increase on hover */
+}
+
+.about-section h2 {
+  color: #0021a5; /* Match the blue theme of the event card */
+  font-size: 32px;
+  font-family: 'Roboto', sans-serif;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.about-section p {
+  font-size: 20px;
+  line-height: 1.8;
+  color: #555555; /* Dark gray for readability */
+  font-family: 'Arial', sans-serif;
+  padding: 0 40px;
+}
+
+.about-section a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.about-section a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .about-section {
+    padding: 20px;
+    margin: 40px 15px;
+  }
+
+  .about-section h2 {
+    font-size: 28px;
+  }
+
+  .about-section p {
+    font-size: 18px;
+    padding: 0 15px;
+  }
+}

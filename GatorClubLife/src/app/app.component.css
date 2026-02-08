@@ -1,0 +1,92 @@
+/* Existing Styles */
+.navbar {
+  background-color: #ffffff;
+  padding: 15px 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo a {
+  font-size: 24px;
+  color: #0021A5;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: #0021A5;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.login-btn button,
+.login-btn a {
+  background-color: #0021A5;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.login-btn button:hover,
+.login-btn a:hover {
+  background-color: #FA4616;
+}
+
+/* New Styles for Dropdown Menu */
+.user-profile-dropdown {
+  position: relative;
+  cursor: pointer;
+  display: inline-block; /* Ensure the container wraps its children */
+}
+
+.user-info {
+  background-color: #0021A5; /* Dark blue background */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 5px); /* Add a small gap between user info and dropdown */
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  list-style-type: none;
+  padding: 0;
+  margin: 0; /* Remove default margin */
+  width: 200px;
+  z-index: 1000;
+}
+
+.dropdown-menu li {
+  padding: 10px 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+.dropdown-menu li:last-child {
+  border-bottom: none;
+}
+
+.dropdown-menu li a {
+  text-decoration: none;
+  color: #f6f6f8; 
+  display: block;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f5e6d3; /* Light yellow hover background */
+}

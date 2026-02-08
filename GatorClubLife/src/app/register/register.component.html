@@ -1,0 +1,75 @@
+<div class="login-container">
+  <h2>Register</h2>
+  <form (ngSubmit)="register()" autocomplete="off">
+    <input type="text" name="fake-username" style="display: none" autocomplete="off" />
+    <input type="password" name="fake-password" style="display: none" autocomplete="off" />
+
+    <div [ngClass]="{'field-error': submitted && !name}">
+      <label for="name">Name:</label>
+      <input type="text" id="name" [(ngModel)]="name" name="name" required />
+    </div>
+
+    <div [ngClass]="{'field-error': submitted && (!email || invalidEmail || emailAvailable === false)}">
+      <label for="email">Email Address:</label>
+      <input type="email" id="email" [(ngModel)]="email" name="email" (ngModelChange)="checkEmailAvailability()" required />
+      <span *ngIf="checkingEmail" class="checking-msg">Checking...</span>
+      <span *ngIf="emailAvailable === false" class="unavailable-msg">This email is already in use.</span>
+      <span *ngIf="emailAvailable === true" class="available-msg">Email is available!</span>
+    </div>
+
+    <div [ngClass]="{'field-error': submitted && (!username || usernameAvailable === false)}">
+      <label for="username">Username:</label>
+      <input type="text" id="username" [(ngModel)]="username" name="username" (ngModelChange)="checkUsernameAvailability()" required />
+      <span *ngIf="checkingUsername" class="checking-msg">Checking...</span>
+      <span *ngIf="usernameAvailable === false" class="unavailable-msg">Username is already taken.</span>
+      <span *ngIf="usernameAvailable === true" class="available-msg">Username is available!</span>
+    </div>
+
+    <div [ngClass]="{'field-error': (submitted && !password) || passwordNotStrong}">
+      <label for="password">Password:</label>
+      <div class="password-container">
+        <input [type]="showPassword ? 'text' : 'password'" id="password"
+               [(ngModel)]="password" name="password" required
+               (input)="onPasswordInput()"
+               (keydown)="handleCapsLock($event, 'password')" />
+        <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" (click)="toggleShowPassword()"></i>
+      </div>
+      <div *ngIf="capsLockOnPassword" class="caps-lock-warning">⚠️ Caps Lock is ON</div>
+
+      <div class="strength-meter" *ngIf="password.length > 0">
+        <div class="strength-bar">
+          <div class="strength-fill" [ngStyle]="{ 'width': passwordStrength + '%', 'background-color': passwordStrengthColor }"></div>
+        </div>
+        <div class="strength-label">{{ passwordStrengthLabel }} ({{ passwordStrength }}%)</div>
+      </div>
+    </div>
+
+    <div [ngClass]="{'field-error': submitted && !confirmPassword}">
+      <label for="confirm-password">Confirm Password:</label>
+      <div class="password-container">
+        <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirm-password"
+               [(ngModel)]="confirmPassword" name="confirm-password" required
+               (keydown)="handleCapsLock($event, 'confirm')" />
+        <i class="fa" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'" (click)="toggleConfirmPassword()"></i>
+      </div>
+      <div *ngIf="capsLockOnConfirm" class="caps-lock-warning">⚠️ Caps Lock is ON</div>
+    </div>
+
+    <div [ngClass]="{'field-error': submitted && !role}">
+      <label for="role">Role:</label>
+      <select id="role" [(ngModel)]="role" name="role" required>
+        <option value="" disabled>Select Role</option>
+        <option value="member">Member</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+
+    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+    <button type="submit">Register</button>
+  </form>
+
+  <div class="register-link">
+    Already have an account?
+    <button (click)="goToLogin()" class="register-btn">Login</button>
+  </div>
+</div>

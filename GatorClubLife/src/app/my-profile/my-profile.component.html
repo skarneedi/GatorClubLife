@@ -1,0 +1,22 @@
+<div class="profile-card">
+    <h2>{{ user?.name }}</h2>
+  
+    <div class="profile-info">
+      <p><strong>Email:</strong> {{ user?.email }}</p>
+      <p><strong>Role:</strong> {{ user?.role }}</p>
+      <p><strong>Member Since:</strong> {{ user?.joined }}</p>
+      <p><strong>Phone:</strong> {{ user?.phone || 'Not Provided' }}</p>
+    </div>
+  
+    <button class="edit-btn" (click)="toggleEdit()" *ngIf="!isEditing">Edit Profile</button>
+  
+    <div *ngIf="isEditing" class="edit-section">
+      <label>
+        Phone Number:
+        <input [(ngModel)]="editablePhone" type="text" />
+      </label>
+      <button class="save-btn" (click)="saveChanges()">Save</button>
+      <button class="cancel-btn" (click)="toggleEdit()">Cancel</button>
+    </div>
+  </div>
+  

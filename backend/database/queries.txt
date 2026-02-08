@@ -1,0 +1,47 @@
+1. Users Table
+CREATE TABLE users (
+    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_name TEXT NOT NULL,
+    user_email TEXT UNIQUE NOT NULL,
+    user_role TEXT CHECK( user_role IN ('admin', 'member', 'organizer') ) NOT NULL,
+    user_created_at INTEGER DEFAULT (strftime('%s', 'now'))
+);
+
+ALTER TABLE users ADD COLUMN user_password TEXT NOT NULL;
+
+2. Clubs Table
+CREATE TABLE clubs (
+    club_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    club_name TEXT NOT NULL,
+    club_description TEXT NOT NULL,
+    club_created_by INTEGER,
+    club_created_at INTEGER DEFAULT (strftime('%s', 'now')),
+    club_category TEXT NOT NULL CHECK (
+        club_category IN (
+            'Academic & Research',
+            'Professional & Career',
+            'Cultural & International',
+            'Arts & Performance',
+            'Recreational & Hobbies',
+            'Service & Volunteering',
+            'Health & Wellness',
+            'Social & Special Interest',
+            'Faith & Spirituality',
+            'Entrepreneurship & Business',
+            'STEM & Innovation',
+            'Sports & Athletics',
+            'Government & Leadership',
+            'Others / Miscellaneous'
+        )
+    ),
+    FOREIGN KEY (club_created_by) REFERENCES users(user_id) ON DELETE SET NULL
+);
+
+3. CREATE TABLE announcements (
+    announcement_id SERIAL PRIMARY KEY,
+    announcement_title VARCHAR(255) NOT NULL,
+    announcement_message TEXT NOT NULL,
+    announcement_created_by INTEGER NOT NULL,
+    announcement_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (announcement_created_by) REFERENCES users(user_id)
+);

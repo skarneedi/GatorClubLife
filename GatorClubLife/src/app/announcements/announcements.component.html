@@ -1,0 +1,28 @@
+<div class="announcement-section">
+  <h2>Announcements</h2>
+
+  <div class="filters">
+    <select [(ngModel)]="selectedCategory" (change)="filterAnnouncements()">
+      <option *ngFor="let category of categories">{{ category }}</option>
+    </select>
+
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="filterAnnouncements()"
+      placeholder="Search announcements..."
+    />
+  </div>
+
+  <div class="announcement-grid">
+    <div class="card" *ngFor="let a of filteredAnnouncements">
+      <h3>{{ a.title }}</h3>
+      <p class="date">Posted on: {{ a.date | date:'fullDate' }}</p>
+      <p *ngIf="!a.expanded">{{ a.content | slice:0:80 }}...</p>
+      <p *ngIf="a.expanded">{{ a.content }}</p>
+      <button (click)="toggleExpand(a.id)">
+        {{ a.expanded ? 'Show Less' : 'Learn More' }}
+      </button>
+    </div>
+  </div>
+</div>

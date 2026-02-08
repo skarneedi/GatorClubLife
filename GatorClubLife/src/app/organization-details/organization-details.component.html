@@ -1,0 +1,61 @@
+<!-- organization-details.component.html -->
+<div class="container" *ngIf="organization.name">
+  <div class="sidebar">
+    <header>
+      <h1>{{ organization.name }}</h1>
+    </header>
+
+    <button class="follow-btn">Follow this Organization</button>
+    <button class="contact-btn">Contact this Organization</button>
+
+    <h3>Officers & Advisors</h3>
+    <ul *ngIf="officers.length; else noOfficers">
+      <li *ngFor="let officer of officers">
+        <span>{{ officer.name }}</span> — <span>{{ officer.role }}</span>
+      </li>
+    </ul>
+    <ng-template #noOfficers>
+      <p>No officers available for this organization.</p>
+    </ng-template>
+  </div>
+
+  <main class="main-content">
+    <section class="purpose">
+      <h2>Purpose</h2>
+      <p>{{ organization.description || 'No description available.' }}</p>
+    </section>
+
+    <section class="announcements">
+      <h2>Announcements</h2>
+      <div *ngIf="announcements.length; else noAnnouncements">
+        <ul>
+          <li *ngFor="let a of announcements">
+            <strong>{{ a.announcement_title }}</strong>: {{ a.announcement_message }}
+          </li>
+        </ul>
+      </div>
+      <ng-template #noAnnouncements>
+        <p>There are no upcoming announcements.</p>
+      </ng-template>
+    </section>
+
+    <section class="events">
+      <h2>Events</h2>
+      <div *ngIf="events.length; else noEvents">
+        <ul>
+          <li *ngFor="let event of events">
+            <strong>{{ event.event_name }}</strong>: {{ event.event_description }}
+          </li>
+        </ul>
+      </div>
+      <ng-template #noEvents>
+        <p>There are no upcoming events.</p>
+      </ng-template>
+    </section>
+  </main>
+</div>
+
+<!-- Optional fallback -->
+<div *ngIf="!organization.name">
+  <p>Loading organization details...</p>
+</div>

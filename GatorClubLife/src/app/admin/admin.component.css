@@ -1,0 +1,112 @@
+.dashboard-title {
+  color: #0021A5;
+  margin-bottom: 24px;
+  font-size: 26px;
+}
+
+.tab-buttons {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tab-buttons button {
+  padding: 8px 16px;
+  background-color: #0021A5;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.tab-buttons button:hover {
+  background-color: #f6851f;
+}
+
+.tab-buttons button.active {
+  background-color: #f6851f;
+  font-weight: bold;
+}
+
+.tab-section {
+  margin-top: 25px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background-color: #fffbe6;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 14px;
+}
+
+th {
+  background-color: #f7b733;
+  color: #0021A5;
+}
+
+.styled-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.styled-list li {
+  background: #fefefe;
+  margin-bottom: 10px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.event-title {
+  font-weight: bold;
+  color: #0021A5;
+}
+
+textarea, input {
+  display: block;
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.post-btn, .delete-btn, .approve-btn {
+  margin-top: 8px;
+  background-color: #0021A5;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.post-btn:hover,
+.delete-btn:hover,
+.approve-btn:hover {
+  background-color: #f6851f;
+}
+
+.success-msg {
+  color: green;
+  margin-top: 8px;
+}

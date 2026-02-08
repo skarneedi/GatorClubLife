@@ -1,0 +1,118 @@
+/* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5e6d3; /* Light yellow background from second image */
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header Section */
+header {
+  background-color: #1F509A; /* Dark blue header from second image */
+  color: white;
+  padding: 20px;
+  text-align: left;
+}
+
+header h1 {
+  margin-top: 0;
+  margin-bottom: 15px; /* Add spacing below the heading */
+  font-size: 24px; /* Adjust heading size */
+}
+
+.welcome-text p {
+  margin: 0 0 10px 0; /* Consistent spacing between paragraphs */
+  line-height: 1.6; /* Improve readability */
+}
+
+.welcome-text strong {
+  font-weight: bold;
+}
+
+.welcome-text a {
+  color: #ffffff; /* White link color for contrast */
+  text-decoration: underline; /* Underline link for emphasis */
+}
+
+/* Content Wrapper */
+.content-wrapper {
+  display: flex;
+  gap: 20px; /* Add spacing between main content and sidebar */
+  margin-top: 50px; /* Move content down by 50 pixels */
+}
+
+/* Event Types Section */
+.event-types {
+  flex-grow: 3; /* Allow the main content to occupy available space */
+}
+
+.event-types h2 {
+  margin-top: 0;
+  margin-bottom: 15px; /* Add spacing below the heading */
+  font-size: 20px; /* Adjust heading size */
+}
+
+.event-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px; /* Add spacing between event cards */
+}
+
+.event-option {
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #F9E6D3; /* Light yellow background from second image */
+  cursor: pointer; /* Indicate that the card is clickable */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth hover effect */
+}
+
+.event-option:hover {
+  background-color: #ff8c00; /* Orange background on hover */
+  color: white; /* White text on orange background */
+  transform: scale(1.05); /* Slightly enlarge the card on hover */
+}
+
+.event-option h3 {
+  margin-top: 0;
+  margin-bottom: 10px; /* Add spacing below the heading */
+  font-size: 18px; /* Adjust heading size */
+}
+
+.event-option p {
+  margin: 0;
+  font-size: 14px; /* Adjust paragraph size */
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 300px; /* Fixed width for the sidebar */
+  position: sticky;
+  top: 100px; /* Keep the sidebar fixed relative to the viewport */
+  padding: 20px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.sidebar h4 {
+  margin-top: 0;
+  margin-bottom: 15px; /* Add spacing below the heading */
+  font-size: 18px; /* Adjust heading size */
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin-bottom: 10px; /* Add spacing between list items */
+  font-size: 14px; /* Adjust font size */
+}

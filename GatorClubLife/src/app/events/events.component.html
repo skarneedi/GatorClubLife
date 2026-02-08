@@ -1,0 +1,107 @@
+<div class="events-container">
+  <h1>Upcoming Events</h1>
+
+  <div class="search-bar">
+    <input type="text" [(ngModel)]="searchQuery" placeholder="Search by organization, title, or location..." />
+    <button (click)="applyFilters()">Search</button>
+    <button (click)="resetFilters()">Reset</button>
+  </div>
+
+  <div class="main-content">
+    <div class="sidebar">
+      <h2>Select a Date</h2>
+      <input type="date" [(ngModel)]="selectedDate" (change)="applyFilters()" />
+
+      <h2>Event Categories</h2>
+      <ul>
+        <li (click)="resetFilters()">All</li>
+        <li (click)="filterByCategory('Music/Concert')">Music/Concert</li>
+        <li (click)="filterByCategory('5k (Run/Walk)')">5k (Run/Walk)</li>
+        <li (click)="filterByCategory('Community Service')">Community Service</li>
+        <li (click)="filterByCategory('Health/Wellness')">Health/Wellness</li>
+      </ul>
+    </div>
+
+    <div class="events-grid">
+      <div class="event-card" *ngFor="let event of filteredEvents">
+        <div class="event-org">{{ event.organization }}</div>
+        <div class="event-title">{{ event.title }}</div>
+        <div class="event-meta">
+          <i class="fa fa-calendar"></i> {{ event.startDate }} – {{ event.endDate }}
+        </div>
+        <div class="event-meta">
+          <i class="fa fa-map-marker"></i> {{ event.location }}
+        </div>
+        <div class="event-desc">{{ event.description }}</div>
+        <a class="event-link" href="#" (click)="$event.preventDefault(); openModal(event)">
+          <i class="fa fa-arrow-right"></i> Learn more
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-backdrop" *ngIf="showModal">
+  <div class="modal-content">
+    <h2 class="modal-title">Event Details: {{ selectedEvent?.title }}</h2>
+
+    <div class="modal-row">
+      <div class="modal-box-row">
+        <div class="modal-icon teal"><i class="fa fa-users"></i></div>
+        <div class="modal-text">
+          <p class="label">Organization</p>
+          <p class="value">{{ selectedEvent?.organization }}</p>
+        </div>
+      </div>
+
+      <div class="modal-box-row">
+        <div class="modal-icon orange"><i class="fa fa-map-marker"></i></div>
+        <div class="modal-text">
+          <p class="label">Event Location</p>
+          <p class="value">{{ selectedEvent?.location }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-row">
+      <div class="modal-box-row">
+        <div class="modal-icon green"><i class="fa fa-calendar-plus-o"></i></div>
+        <div class="modal-text">
+          <p class="label">Starts</p>
+          <p class="value">{{ selectedEvent?.startDate }}</p>
+        </div>
+      </div>
+
+      <div class="modal-box-row">
+        <div class="modal-icon red"><i class="fa fa-calendar-times-o"></i></div>
+        <div class="modal-text">
+          <p class="label">Ends</p>
+          <p class="value">{{ selectedEvent?.endDate }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-box-row full-width">
+      <div class="modal-icon blue"><i class="fa fa-info-circle"></i></div>
+      <div class="modal-text">
+        <p class="label">Details</p>
+        <p class="description">{{ selectedEvent?.description }}</p>
+      </div>
+    </div>
+
+    <p><strong>Email:</strong> {{ userEmail }}</p>
+
+    <div *ngIf="!selectedEvent?.rsvped">
+      <button class="rsvp-btn" (click)="rsvpToEvent()">RSVP</button>
+    </div>
+
+    <div *ngIf="selectedEvent?.rsvped">
+      <button class="undo-btn" (click)="undoRSVP()">Undo RSVP</button>
+    </div>
+
+    <div *ngIf="rsvpMessage" class="rsvp-message">{{ rsvpMessage }}</div>
+
+    <button class="close-btn" (click)="closeModal()">Close</button>
+  </div>
+</div>

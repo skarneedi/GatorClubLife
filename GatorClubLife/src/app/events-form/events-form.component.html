@@ -1,0 +1,63 @@
+<div class="container">
+  <!-- Header Section -->
+  <header>
+    <h2>Basic Event Information</h2>
+    <p>Now that you have chosen the type of event, please provide some basic information about the event.</p>
+  </header>  
+
+  <!-- Content Wrapper -->
+  <div class="content-wrapper">
+    <!-- Main Content -->
+    <section class="main-content">
+      <div class="form-section">
+        <h3>Event Information - Vendor</h3>
+        <form>
+          <div class="form-group">
+            <label for="eventName">Name of the event</label>
+            <input type="text" id="eventName" [(ngModel)]="eventName" name="eventName" placeholder="Enter event name" required />
+            <span class="required">*Required</span>
+          </div>
+          <div class="form-group">
+            <label for="eventPurpose">The purpose of the event</label>
+            <textarea id="eventPurpose" [(ngModel)]="eventPurpose" name="eventPurpose" rows="4" placeholder="Describe your event"></textarea>
+            <span class="required">*Required</span>
+          </div>
+          <div class="form-group">
+            <label for="expectedAttendance">Expected attendance</label>
+            <input type="number" id="expectedAttendance" [(ngModel)]="expectedAttendance" name="expectedAttendance" placeholder="0" required />
+            <span class="required">*Required</span>
+          </div>
+        </form>
+      </div>
+
+      <div class="form-section">
+        <h3>Event Categories</h3>
+        <p>Please select the relevant categories for your event.</p>
+        <div class="category-buttons">
+          <button 
+            *ngFor="let category of categories" 
+            (click)="toggleCategory(category)"
+            [ngClass]="{ 'selected': isSelected(category) }"
+            type="button"
+          >
+            {{ category }}
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sidebar for Type of Permit -->
+    <aside class="sidebar">
+      <h4>Type of Permit</h4>
+      <ul>
+        <li><input type="radio" name="permitType" checked disabled /> Basic Information</li>
+        <li><input type="radio" name="permitType" disabled /> Event Dates</li>
+        <li><input type="radio" name="permitType" disabled /> Additional Forms</li>
+        <li><input type="radio" name="permitType" disabled /> Review</li>
+      </ul>
+    </aside>
+  </div>
+
+  <!-- Next Button -->
+  <button class="next-button" (click)="goToEventDates()">Next</button>
+</div>

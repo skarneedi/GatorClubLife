@@ -1,0 +1,49 @@
+<header>
+  <nav class="navbar">
+    <div class="logo">
+      <a routerLink="/home" style="text-decoration: none; display: flex; align-items: center;">
+        <span style="color: #0021A5; font-size: 1.8rem; font-weight: bold;">GatorClubLife</span>
+      </a>      
+    </div>
+
+    <ul class="nav-links">
+      <li><a routerLink="/organizations">Organizations</a></li>
+      <li><a routerLink="/events">Events</a></li>
+      <li><a routerLink="/permits" class="uppercase-link">Permits</a></li>
+      <a *ngIf="isAdmin()" routerLink="/admin">Admin</a>
+      <li><a routerLink="/about">About</a></li>
+    </ul>
+
+    <!-- User Profile Dropdown -->
+    <div class="login-btn">
+      <ng-container *ngIf="(isLoggedIn$ | async); else loginLink">
+        <div
+          class="user-profile-dropdown"
+          (click)="toggleDropdown($event)"
+        >
+          <div class="user-info">
+            <span>Hi, {{ (userName$ | async) || 'Guest' }}!</span> <!-- Fallback to "Guest" if userName is null -->
+          </div>
+          <ul class="dropdown-menu" *ngIf="showDropdown">
+            <li><a routerLink="/profile">Profile</a></li>
+            <li><a routerLink="/involvement">Involvement</a></li>
+            <li><a routerLink="/my-events">My Events</a></li>
+            <li><a routerLink="/my-submissions">My Submissions</a></li>
+            <li><a routerLink="/forms">Forms</a></li>
+            <li><a (click)="logout()">Sign out</a></li>
+          </ul>
+        </div>
+      </ng-container>
+      <ng-template #loginLink>
+        <a routerLink="/login">Student Login</a>
+      </ng-template>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <router-outlet></router-outlet>
+
+</main>
+
+<app-announcements *ngIf="showAnnouncements"></app-announcements>

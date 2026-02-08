@@ -1,0 +1,93 @@
+.my-events-container {
+    min-height: 100vh;
+    padding: 2rem;
+    background:  #f5b649;
+    color: #fff;
+  }
+  
+  .page-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+  }
+  
+  .filter-row {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .category-filter, .search-filter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .category-filter select,
+  .search-filter input {
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+  
+  /* White card container for clarity */
+  .events-grid {
+    background: #fff;
+    border-radius: 10px;
+    padding: 2rem;
+    color: #000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .event-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease;
+  }
+  
+  .event-card:hover {
+    transform: translateY(-3px);
+  }
+  
+  .event-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #0021A5;
+    margin-bottom: 0.5rem;
+  }
+  
+  .event-date, .event-location, .event-desc {
+    margin: 0.25rem 0;
+    font-size: 0.95rem;
+    color: #333;
+  }
+  
+  .actions {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .favorite-btn {
+    background-color: #0021a5;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .favorite-btn:hover {
+    background-color: #fa4616; /* Gator Orange on hover */
+  }
+  

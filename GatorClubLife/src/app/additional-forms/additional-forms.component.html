@@ -1,0 +1,40 @@
+<div class="container">
+  <div class="page-header-bar">
+    <h2>Additional Forms</h2>
+    <p>Please upload or fill out any extra documentation required for your event permit.</p>
+  </div>
+
+  <div class="main-layout">
+    <!-- Main Content -->
+    <div class="form-section">
+      <label for="fileUpload">Upload Supporting Documents</label>
+      <input type="file" id="fileUpload" (change)="handleFileUpload($event)" multiple />
+
+      <label for="notes">Additional Notes</label>
+      <textarea
+        id="notes"
+        rows="5"
+        placeholder="Any extra details about your event..."
+        [(ngModel)]="notes"
+      ></textarea>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar-panel">
+      <div class="card">
+        <h4>Type of Permit</h4>
+        <ul class="permit-list">
+          <li><input type="radio" name="permitType" disabled> Basic Information</li>
+          <li><input type="radio" name="permitType" disabled> Event Dates</li>
+          <li><input type="radio" name="permitType" checked> Additional Forms</li>
+          <li><input type="radio" name="permitType" disabled> Review</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="navigation-bar">
+    <button class="back-button" (click)="goBack()">Back</button>
+    <button class="next-button" (click)="goToNextPage()">Next</button>
+  </div>
+</div>

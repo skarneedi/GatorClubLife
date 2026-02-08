@@ -1,0 +1,43 @@
+<div class="container">
+  <!-- Header Section -->
+  <header>
+    <h1>My Submissions</h1>
+  </header>
+
+  <!-- Only My Permits Content -->
+  <main>
+    <section>
+      <h2>My Permits</h2>
+      <p>Want to check on the status of your permits? Look no further!</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Permit #</th>
+            <th>Event Name</th>
+            <th>Submitter</th>
+            <th>Number of Dates</th>
+            <th>Overall Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let permit of myPermits">
+            <td>{{ permit.id }}</td>
+            <td>{{ permit.event_name }}</td>
+            <td>{{ permit.submitted_by }}</td>
+            <td>{{ permit.slot_count }}</td>
+            <td>
+              <span [ngClass]="{
+                'status-chip completed': permit.status.toLowerCase() === 'completed',
+                'status-chip pending': permit.status.toLowerCase() === 'pending',
+                'status-chip denied': permit.status.toLowerCase() === 'denied'
+              }">
+                {{ permit.status | titlecase }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>

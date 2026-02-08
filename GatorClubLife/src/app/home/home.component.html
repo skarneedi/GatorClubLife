@@ -1,0 +1,74 @@
+<div class="home-container">
+    <div class="hero-box">
+      <div class="semester-label">Spring Semester 2025</div>
+      <h1 class="main-title">Welcome to <span>GatorClubLife </span></h1>
+      <p class="subtitle">
+        Explore the latest club activities, events, and announcements.<br />
+        Connect with fellow students and make the most of your campus experience!
+      </p>
+      <div class="hero-buttons">
+        <a routerLink="/organizations" class="primary-btn">Browse Clubs</a>
+        <a routerLink="/events" class="secondary-btn">Upcoming Events</a>
+      </div>
+    </div>
+  
+    <section class="latest-section">
+      <h2 class="section-title">Popular Clubs</h2>
+      <div class="popular-grid">
+        <div class="club-card" *ngFor="let club of popularClubs">
+          <img
+            class="club-avatar"
+            [src]="'assets/images/' + club.image"
+            [alt]="club.name"
+          />
+          <h3>{{ club.name }}</h3>
+          <p class="club-members">
+            <span class="icon">👥</span> {{ club.members }} members
+          </p>
+        </div>
+      </div>
+    </section>
+  
+    <section class="latest-section">
+      <h2>Latest Announcements</h2>
+      <div class="announcement-grid">
+        <div class="card" *ngFor="let a of latestAnnouncements">
+          <h3>{{ a.title }}</h3>
+          <p class="date">Posted on: {{ a.date | date: 'fullDate' }}</p>
+          <p>{{ a.content | slice: 0:100 }}...</p>
+        </div>
+      </div>
+    </section>
+  
+    <section class="latest-section">
+      <h2>Upcoming Events</h2>
+      <div class="event-grid">
+        <div class="event-card" *ngFor="let event of upcomingEvents">
+          <h3>{{ event.title }}</h3>
+          <p><strong>Date:</strong> {{ event.date }}</p>
+          <p><strong>Time:</strong> {{ event.time }}</p>
+          <p><strong>Location:</strong> {{ event.location }}</p>
+        </div>
+      </div>
+    </section>
+  
+    <section class="newsletter-section">
+      <h2>Stay Updated</h2>
+      <p>Subscribe to our newsletter to get the latest updates on club activities and events.</p>
+      <form class="newsletter-form" (submit)="subscribeEmail($event)">
+        <input type="email" placeholder="Enter your email" required />
+        <button type="submit">Subscribe</button>
+      </form>
+    </section>
+  
+    <footer class="home-footer">
+      <div class="footer-left">
+        <h3>GatorClubLife</h3>
+        <p>Connecting students through clubs and events since 2020.</p>
+      </div>
+      <div class="footer-right">
+        <p>Contact us: <a href="mailto:clubs&#64;ufl.edu">clubs&#64;ufl.edu</a></p>
+      </div>
+    </footer>
+  </div>
+  

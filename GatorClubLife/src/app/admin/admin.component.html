@@ -1,0 +1,110 @@
+<h2 class="dashboard-title">Admin Dashboard</h2>
+
+<div class="tab-buttons">
+  <button (click)="switchTab('users')" [class.active]="activeTab === 'users'">Manage Users</button>
+  <button (click)="switchTab('events')" [class.active]="activeTab === 'events'">Manage Events</button>
+  <button (click)="switchTab('announcement')" [class.active]="activeTab === 'announcement'">Create Announcement</button>
+  <button (click)="switchTab('organizations')" [class.active]="activeTab === 'organizations'">Manage Organizations</button>
+  <button (click)="switchTab('permits')" [class.active]="activeTab === 'permits'">Approve Permits</button>
+  <button (click)="switchTab('logs')" [class.active]="activeTab === 'logs'">View Logs</button>
+  <button (click)="switchTab('feedback')" [class.active]="activeTab === 'feedback'">View Feedback</button>
+  <button (click)="switchTab('categories')" [class.active]="activeTab === 'categories'">Manage Categories</button>
+  <button (click)="switchTab('settings')" [class.active]="activeTab === 'settings'">Site Settings</button>
+</div>
+
+<!-- Users -->
+<div *ngIf="activeTab === 'users'" class="tab-section">
+  <h3>All Registered Users</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Joined</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.user_id }}</td>
+          <td>{{ user.user_name }}</td>
+          <td>{{ user.user_email }}</td>
+          <td>{{ user.user_role }}</td>
+          <td>{{ user.user_created_at }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Events -->
+<div *ngIf="activeTab === 'events'" class="tab-section">
+  <h3>All Events</h3>
+  <ul class="styled-list">
+    <li *ngFor="let event of events">
+      <span class="event-title">{{ event.title }}</span> — {{ event.date }} &#64; {{ event.location }}
+      <button class="delete-btn" (click)="deleteEvent(event.id)">Delete</button>
+    </li>
+  </ul>
+</div>
+
+<!-- Announcements -->
+<div *ngIf="activeTab === 'announcement'" class="tab-section">
+  <h3>Post New Announcement</h3>
+  <input placeholder="Title" [(ngModel)]="newAnnouncement.title" />
+  <input placeholder="Category (optional)" [(ngModel)]="newAnnouncement.category" />
+  <textarea placeholder="Content" [(ngModel)]="newAnnouncement.content"></textarea>
+  <button class="post-btn" (click)="postAnnouncement()">Post</button>
+  <p *ngIf="announcementPosted" class="success-msg">✅ Announcement posted!</p>
+</div>
+
+<!-- Organizations -->
+<div *ngIf="activeTab === 'organizations'" class="tab-section">
+  <h3>Manage Organizations</h3>
+  <ul class="styled-list">
+    <li *ngFor="let club of organizations">
+      <strong>{{ club.name }}</strong>: {{ club.description }}
+    </li>
+  </ul>
+</div>
+
+<!-- Permits -->
+<div *ngIf="activeTab === 'permits'" class="tab-section">
+  <h3>Permit Submissions</h3>
+  <ul class="styled-list">
+    <li *ngFor="let permit of permits">
+      <strong>{{ permit.event }}</strong> by {{ permit.submittedBy }} — <em>Status: {{ permit.status }}</em>
+      <button *ngIf="permit.status === 'Pending'" class="approve-btn" (click)="approvePermit(permit.id)">Approve</button>
+    </li>
+  </ul>
+</div>
+
+<!-- Logs -->
+<div *ngIf="activeTab === 'logs'" class="tab-section">
+  <h3>Activity Logs</h3>
+  <ul class="styled-list">
+    <li *ngFor="let log of logs">{{ log }}</li>
+  </ul>
+</div>
+
+<!-- Feedback -->
+<div *ngIf="activeTab === 'feedback'" class="tab-section">
+  <h3>Student Feedback</h3>
+  <ul class="styled-list">
+    <li *ngFor="let f of feedback"><strong>{{ f.name }}</strong>: {{ f.message }}</li>
+  </ul>
+</div>
+
+<!-- Categories -->
+<div *ngIf="activeTab === 'categories'" class="tab-section">
+  <h3>Manage Categories</h3>
+  <ul class="styled-list">
+    <li *ngFor="let c of categories">{{ c }}</li>
+  </ul>
+  <input placeholder="Add New Category" #newCat />
+  <button class="post-btn" (click)="addCategory(newCat.value); newCat.value = ''">Add</button>
+</div>
+
+<!-- Settings -->
+<div *ngIf="activeTab === 'settings'" class="tab-section">
+  <h3>Site Settings</h3>
+  <label>
+    <input type="checkbox" [(ngModel)]="maintenanceMode" (change)="toggleMaintenance()" />
+    Enable Maintenance Mode
+  </label>
+  <p>Status: <strong>{{ maintenanceMode ? 'ON' : 'OFF' }}</strong></p>
+</div>
