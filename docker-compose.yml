@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - sqlite_data:/app/data
+      - ./backend:/app # Mount source for live reload if configured (optional)
+      # Ensure db file is accessible
+      - ./backend/gator_club_life.db:/root/gator_club_life.db
+    environment:
+      - AUTH0_DOMAIN=${AUTH0_DOMAIN}
+      # For SQLite, the path inside the container
+      - DB_PATH=/root/gator_club_life.db
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./GatorClubLife
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./GatorClubLife:/app
+      - /app/node_modules # Avoid overwriting container node_modules with host's (which might be incompatible if host is diff OS)
+    environment:
+      - CHOKIDAR_USEPOLLING=true # Often needed for file watching in Docker on some OS's
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  sqlite_data:

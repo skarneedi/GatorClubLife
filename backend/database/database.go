@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"gorm.io/driver/sqlite"
@@ -143,7 +144,13 @@ func (EventDocument) TableName() string {
 
 func InitDB() {
 	var err error
-	DB, err = gorm.Open(sqlite.Open("../gator_club_life.db"), &gorm.Config{})
+	dbPath := os.Getenv("DB_PATH")
+	if dbPath == "" {
+		dbPath = "../gator_club_life.db"
+	}
+	fmt.Println("📂 Database path:", dbPath)
+
+	DB, err = gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
 	if err != nil {
 		fmt.Println("error while connecting to the database:", err)
 		return

@@ -57,6 +57,27 @@ ng serve
 
 Ensure both backend and frontend are running for full functionality.
 
+### Docker Setup (Recommended)
+You can run the full stack (Frontend + Backend + Database) using Docker Compose.
+
+**Prerequisites:**
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
+- **Auth0 Domain**: Set the `AUTH0_DOMAIN` environment variable in `docker-compose.yml` or your shell.
+
+**Run the Application:**
+```bash
+# Start all services
+docker compose up --build
+
+# Run in background
+docker compose up --build -d
+
+# Stop services
+docker compose down
+```
+- Frontend: `http://localhost:4200`
+- Backend: `http://localhost:8080`
+
 ## Usage
 
 - Open your browser at `http://localhost:4200`
