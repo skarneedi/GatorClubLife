@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router, NavigationEnd } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
-import { AnnouncementsComponent } from './announcements/announcements.component';
 
 @Component({
   selector: 'app-root',
@@ -14,20 +13,9 @@ import { AnnouncementsComponent } from './announcements/announcements.component'
     CommonModule,
     RouterModule,
     NavbarComponent,
-    FooterComponent,
-    AnnouncementsComponent
+    FooterComponent
   ],
 })
-export class AppComponent implements OnInit {
-  showAnnouncements = false;
-
-  constructor(private router: Router) { }
-
-  ngOnInit(): void {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.showAnnouncements = event.url === '/home' || event.url === '/home/';
-      }
-    });
-  }
+export class AppComponent {
+  constructor() { }
 }

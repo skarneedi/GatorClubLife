@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { ButtonComponent } from '../shared/components/button/button.component';
+import { CardComponent } from '../shared/components/card/card.component';
 
 interface Announcement {
   id: number;
@@ -25,7 +28,7 @@ interface Club {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonComponent, CardComponent, RouterLink], // Added UI components
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
@@ -57,12 +60,12 @@ export class HomeComponent implements OnInit {
     { name: 'Photography Society', members: 78, image: 'photo.png' },
     { name: 'Debate Team', members: 35, image: 'debate.png' },
     { name: 'Chess Club', members: 56, image: 'chess.png' }
-  ];  
+  ];
 
   isLoading = true;
   errorMessage = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
     this.http.get<any[]>('http://localhost:8080/announcements', {
