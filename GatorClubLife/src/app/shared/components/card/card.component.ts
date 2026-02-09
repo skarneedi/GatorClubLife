@@ -13,7 +13,7 @@ export class CardComponent {
   @Input() hoverEffects = false;
 
   get classes(): string {
-    const base = 'bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden block';
+    const base = 'bg-surface rounded-2xl shadow-sm border border-border-light overflow-hidden block h-full';
 
     // Tailwind paddings
     const paddings = {
@@ -23,7 +23,7 @@ export class CardComponent {
       lg: 'p-8',
     };
 
-    const hover = this.hoverEffects ? 'transition-all duration-300 hover:shadow-md hover:-translate-y-1 cursor-pointer' : '';
+    const hover = this.hoverEffects ? 'transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer' : '';
 
     return `${base} ${paddings[this.padding]} ${hover}`;
   }

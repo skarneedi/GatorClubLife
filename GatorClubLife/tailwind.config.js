@@ -23,7 +23,20 @@ module.exports = {
           DEFAULT: '#0021A5', // UF Gator Blue (Pantone 287)
           light: '#334eac', // Lighter blue for hover states
           dark: '#00166e',
+          50: '#eef2ff',
+          100: '#e0e7ff',
+          200: '#c7d2fe',
+          300: '#a5b4fc',
+          400: '#818cf8',
+          500: '#6366f1', // Indigo-ish (placeholder if needed, but we use strict Gator Blue usually)
+          600: '#0021A5', // Main Blue
+          700: '#001b85',
+          800: '#00166e',
+          900: '#000f4d',
         },
+        surface: '#ffffff',
+        background: '#F8FAFC', // Light neutral background
+        'border-light': '#E2E8F0', // Subtle border color
         accent: '#FA4616', // Also Orange
         neutral: {
           50: '#f8f9fa',
