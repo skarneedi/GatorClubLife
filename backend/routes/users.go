@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // GetUsers godoc
@@ -20,7 +19,7 @@ func GetUsers(c *fiber.Ctx) error {
 	fmt.Println("📥 GetUsers API called")
 
 	var users []database.User
-	result := database.DB.Select("user_id, user_name, user_email, user_role, user_created_at").Find(&users)
+	result := database.DB.Find(&users)
 	if result.Error != nil {
 		fmt.Println("❌ Error fetching users:", result.Error)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -32,23 +31,23 @@ func GetUsers(c *fiber.Ctx) error {
 }
 
 // CreateUser godoc
-// @Summary      Register a new user
-// @Description  Creates a new user with name, email, password, and role.
+// @Summary      Register/Sync a new user from Auth0
+// @Description  Creates a new user profile if it doesn't exist, using Auth0 ID.
 // @Tags         Users
 // @Accept       json
 // @Produce      json
 // @Param        user  body      database.User  true  "New user data"
-// @Success      200   {object}  map[string]interface{}
+// @Success      200   {object}  database.User
 // @Failure      400   {object}  map[string]string
 // @Failure      500   {object}  map[string]string
 // @Router       /users/create [post]
 func CreateUser(c *fiber.Ctx) error {
 	fmt.Println("📨 CreateUser API called")
 
-	var user database.User
+	var req database.User
 
 	// Parse request body
-	if err := c.BodyParser(&user); err != nil {
+	if err := c.BodyParser(&req); err != nil {
 		fmt.Println("❌ JSON parse error:", err)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Invalid JSON format in request body",
@@ -56,49 +55,30 @@ func CreateUser(c *fiber.Ctx) error {
 	}
 
 	// Validate required fields
-	if user.UserName == "" || user.UserEmail == "" || user.UserRole == "" || user.UserPassword == "" {
+	if req.UserName == "" || req.UserEmail == "" || req.UserRole == "" || req.Auth0ID == "" {
 		fmt.Println("❌ Missing fields in request")
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Missing required fields: name, email, role, or password",
+			"error": "Missing required fields: name, email, role, or auth0_id",
 		})
 	}
 
-	// Check if email already exists
+	// Check if user already exists by Auth0 ID or Email
 	var existing database.User
-	if err := database.DB.Where("user_email = ?", user.UserEmail).First(&existing).Error; err == nil {
-		fmt.Println("❌ User already exists with email:", user.UserEmail)
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "User already exists with this email",
-		})
+	err := database.DB.Where("auth0_id = ? OR user_email = ?", req.Auth0ID, req.UserEmail).First(&existing).Error
+	if err == nil {
+		fmt.Println("ℹ️ User already exists, returning existing profile:", existing.UserEmail)
+		// Option: Update existing user if needed
+		return c.Status(fiber.StatusOK).JSON(existing)
 	}
 
-	// Hash the password
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.UserPassword), bcrypt.DefaultCost)
-	if err != nil {
-		fmt.Println("❌ Error hashing password:", err)
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Internal error while processing password",
-		})
-	}
-	user.UserPassword = string(hashedPassword)
-
-	// Save user
-	if err := database.DB.Create(&user).Error; err != nil {
+	// Save new user
+	if err := database.DB.Create(&req).Error; err != nil {
 		fmt.Println("❌ Failed to save user to database:", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Could not register user. Try again later.",
 		})
 	}
 
-	// Success response (omit password)
-	response := fiber.Map{
-		"user_id":         user.UserID,
-		"user_name":       user.UserName,
-		"user_email":      user.UserEmail,
-		"user_role":       user.UserRole,
-		"user_created_at": user.UserCreatedAt,
-	}
-
-	fmt.Println("✅ User created:", response)
-	return c.Status(fiber.StatusOK).JSON(response)
+	fmt.Println("✅ User created:", req.UserEmail)
+	return c.Status(fiber.StatusCreated).JSON(req)
 }

@@ -14,12 +14,12 @@ import { MyProfileComponent } from './my-profile/my-profile.component';
 import { MyEventsComponent } from './my-events/my-events.component';
 import { EventsFormComponent } from './events-form/events-form.component';
 import { EventDatesComponent } from './event-dates/event-dates.component';
-import { AdditionalFormsComponent } from './additional-forms/additional-forms.component'; 
+import { AdditionalFormsComponent } from './additional-forms/additional-forms.component';
 import { EventReviewComponent } from './event-review/event-review.component';
 import { AdminComponent } from './admin/admin.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', component: LoginComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'home', component: HomeComponent, canActivate: [authGuard] },
@@ -30,7 +30,7 @@ export const routes: Routes = [
   { path: 'my-events', component: MyEventsComponent },
   { path: 'admin', component: AdminComponent },
   { path: 'organizations', component: OrganizationsComponent, canActivate: [authGuard] },
-{ path: 'events', component: EventsComponent, canActivate: [authGuard] },
+  { path: 'events', component: EventsComponent, canActivate: [authGuard] },
   {
     path: 'organizations',
     component: OrganizationsComponent,

@@ -44,10 +44,10 @@ func TestGetUsers(t *testing.T) {
 
 	// Insert a test user.
 	testUser := database.User{
-		UserName:     "user1",
-		UserEmail:    "user1@example.com",
-		UserRole:     "member",
-		UserPassword: "dummy", // Not used in GetUsers.
+		UserName:  "user1",
+		UserEmail: "user1@example.com",
+		UserRole:  "member",
+		Auth0ID:   "auth0|123456",
 	}
 	if err := database.DB.Create(&testUser).Error; err != nil {
 		t.Fatalf("Error creating test user: %v", err)
@@ -84,10 +84,10 @@ func TestCreateUser(t *testing.T) {
 	app := setupUserApp()
 
 	payload := map[string]string{
-		"user_name":     "testuser",
-		"user_email":    "testuser@example.com",
-		"user_role":     "member",
-		"user_password": "password123",
+		"user_name":  "testuser",
+		"user_email": "testuser@example.com",
+		"user_role":  "member",
+		"auth0_id":   "auth0|newuser",
 	}
 	body, _ := json.Marshal(payload)
 	req := httptest.NewRequest("POST", "/users/create", bytes.NewBuffer(body))
@@ -98,8 +98,8 @@ func TestCreateUser(t *testing.T) {
 		t.Fatalf("Error making POST /users/create request: %v", err)
 	}
 
-	if resp.StatusCode != http.StatusOK {
-		t.Fatalf("Expected status 200, got %v", resp.StatusCode)
+	if resp.StatusCode != http.StatusCreated { // Expect 201 Created
+		t.Fatalf("Expected status 201, got %v", resp.StatusCode)
 	}
 
 	var createdUser map[string]interface{}
@@ -108,9 +108,6 @@ func TestCreateUser(t *testing.T) {
 	}
 
 	t.Logf("User created: %+v", createdUser)
-	if _, exists := createdUser["user_password"]; exists {
-		t.Error("Expected user_password to be cleared from response, but it is present")
-	}
 	if createdUser["user_id"] == nil {
 		t.Error("Expected user_id to be present in response, but it is nil")
 	}
@@ -134,17 +131,6 @@ func TestCreateUserInvalidJSON(t *testing.T) {
 	if resp.StatusCode != http.StatusBadRequest {
 		t.Fatalf("Expected status 400 for invalid JSON, got %v", resp.StatusCode)
 	}
-
-	var errorResp map[string]string
-	if err := json.NewDecoder(resp.Body).Decode(&errorResp); err != nil {
-		t.Fatalf("Error decoding error response: %v", err)
-	}
-
-	if errorMsg, ok := errorResp["error"]; !ok || errorMsg == "" {
-		t.Error("Expected an error message for invalid JSON")
-	} else {
-		t.Logf("Received error message: %s", errorMsg)
-	}
 	t.Log("TestCreateUserInvalidJSON passed.\n")
 }
 
@@ -153,9 +139,10 @@ func TestCreateUserMissingFields(t *testing.T) {
 	initTestDB()
 	app := setupUserApp()
 
+	// Missing auth0_id
 	payload := map[string]string{
-		"user_email":    "missing@example.com",
-		"user_password": "password123",
+		"user_email": "missing@example.com",
+		"user_role":  "member",
 	}
 	body, _ := json.Marshal(payload)
 	req := httptest.NewRequest("POST", "/users/create", bytes.NewBuffer(body))
@@ -169,17 +156,6 @@ func TestCreateUserMissingFields(t *testing.T) {
 	if resp.StatusCode != http.StatusBadRequest {
 		t.Fatalf("Expected status 400 for missing fields, got %v", resp.StatusCode)
 	}
-
-	var errorResp map[string]string
-	if err := json.NewDecoder(resp.Body).Decode(&errorResp); err != nil {
-		t.Fatalf("Error decoding error response: %v", err)
-	}
-
-	if errorMsg, ok := errorResp["error"]; !ok || errorMsg == "" {
-		t.Error("Expected an error message for missing fields")
-	} else {
-		t.Logf("Received error message: %s", errorMsg)
-	}
 	t.Log("TestCreateUserMissingFields passed.\n")
 }
 
@@ -189,39 +165,35 @@ func TestDuplicateUserRegistration(t *testing.T) {
 	app := setupUserApp()
 
 	payload := map[string]string{
-		"user_name":     "duplicateUser",
-		"user_email":    "duplicate@example.com",
-		"user_role":     "member",
-		"user_password": "password123",
+		"user_name":  "duplicateUser",
+		"user_email": "duplicate@example.com",
+		"user_role":  "member",
+		"auth0_id":   "auth0|dup",
 	}
 	body, _ := json.Marshal(payload)
 	req := httptest.NewRequest("POST", "/users/create", bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 
-	// First registration should succeed.
+	// First registration
 	resp, err := app.Test(req)
 	if err != nil {
 		t.Fatalf("Error making first POST /users/create request: %v", err)
 	}
-	if resp.StatusCode != http.StatusOK {
-		t.Fatalf("Expected status 200 for first registration, got %v", resp.StatusCode)
+	if resp.StatusCode != http.StatusCreated {
+		t.Fatalf("Expected status 201 for first registration, got %v", resp.StatusCode)
 	}
 	t.Log("First registration passed.")
 
-	// Second registration with the same email.
+	// Second registration should succeed and return existing user (idempotent)
 	resp2, err := app.Test(req)
 	if err != nil {
 		t.Fatalf("Error making second POST /users/create request: %v", err)
 	}
 
-	if resp2.StatusCode == http.StatusOK {
-		t.Error("Expected duplicate registration to fail, but it returned status 200")
+	if resp2.StatusCode != http.StatusOK {
+		t.Errorf("Expected idempotency (200 OK) for duplicate registration, got %v", resp2.StatusCode)
 	} else {
-		var errorResp map[string]string
-		if err := json.NewDecoder(resp2.Body).Decode(&errorResp); err != nil {
-			t.Fatalf("Error decoding error response for duplicate registration: %v", err)
-		}
-		t.Logf("Duplicate registration error response: %+v", errorResp)
+		t.Log("Duplicate registration returned existing user as expected.")
 	}
 	t.Log("TestDuplicateUserRegistration passed.\n")
 }

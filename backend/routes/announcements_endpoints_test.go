@@ -89,10 +89,10 @@ func TestCreateAnnouncementSuccess(t *testing.T) {
 
 	// Create a test user (admin) to post the announcement
 	adminUser := database.User{
-		UserName:     "AdminUser",
-		UserEmail:    "admin@example.com",
-		UserRole:     "admin",
-		UserPassword: "hashedDummyPassword", // Not used in this test
+		UserName:  "AdminUser",
+		UserEmail: "admin@example.com",
+		UserRole:  "admin",
+		Auth0ID:   "auth0|admin",
 	}
 	if err := database.DB.Create(&adminUser).Error; err != nil {
 		t.Fatalf("Error creating admin user: %v", err)
@@ -137,10 +137,10 @@ func TestCreateAnnouncementMissingFields(t *testing.T) {
 
 	// Create an admin user to simulate a valid user
 	adminUser := database.User{
-		UserName:     "AdminUser",
-		UserEmail:    "admin@example.com",
-		UserRole:     "admin",
-		UserPassword: "hashedDummyPassword",
+		UserName:  "AdminUser",
+		UserEmail: "admin@example.com",
+		UserRole:  "admin",
+		Auth0ID:   "auth0|admin2",
 	}
 	database.DB.Create(&adminUser)
 
@@ -172,10 +172,10 @@ func TestCreateAnnouncementNonAdmin(t *testing.T) {
 
 	// Create a test user (non-admin)
 	normalUser := database.User{
-		UserName:     "NormalUser",
-		UserEmail:    "normal@example.com",
-		UserRole:     "member", // not admin
-		UserPassword: "hashedDummyPassword",
+		UserName:  "NormalUser",
+		UserEmail: "normal@example.com",
+		UserRole:  "member", // not admin
+		Auth0ID:   "auth0|normal",
 	}
 	if err := database.DB.Create(&normalUser).Error; err != nil {
 		t.Fatalf("Error creating normal user: %v", err)

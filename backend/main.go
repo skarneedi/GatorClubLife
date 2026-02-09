@@ -11,16 +11,8 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/gofiber/fiber/v2/middleware/session"
 	fiberSwagger "github.com/swaggo/fiber-swagger"
 )
-
-var store = session.New(session.Config{
-	CookieSecure:   false, // use true if using HTTPS
-	CookieHTTPOnly: true,
-	CookieSameSite: "None", // Required for cross-site cookies
-	Expiration:     0,      // session does not expire unless manually cleared
-})
 
 func main() {
 	fmt.Println("🔁 Starting Gator-Club-Life Backend...")
@@ -35,43 +27,12 @@ func main() {
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:     "http://localhost:4200",
 		AllowCredentials: true,
+		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
 	}))
-
-	// Attach session store to middleware
-	routes.SetStore(store)
-	middleware.SetStore(store)
-
-	// Apply session context globally
-	app.Use(middleware.SessionContext())
-
-	// 🧪 Debug session info
-	app.Get("/session-check", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{
-			"user_email": c.Locals("user_email"),
-			"user_id":    c.Locals("user_id"),
-			"user_role":  c.Locals("user_role"),
-		})
-	})
-
-	app.Get("/debug-session", func(c *fiber.Ctx) error {
-		val := c.Locals("session")
-		if val == nil {
-			fmt.Println("⚠️ No session attached to context")
-			return c.SendString("No session found in context")
-		}
-		sess := val.(*session.Session)
-		email := sess.Get("user_email")
-		if email == nil {
-			fmt.Println("⚠️ Session exists, but no user_email stored")
-			return c.SendString("Session exists but no user_email set")
-		}
-		fmt.Println("✅ Session found for:", email)
-		return c.SendString(fmt.Sprintf("Session found for: %v", email))
-	})
 
 	// 🌐 Default Route
 	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Welcome to Gator-Club-Life!")
+		return c.SendString("Welcome to Gator-Club-Life API (Auth0 Enabled)!")
 	})
 
 	// 🧾 Swagger Docs
@@ -79,26 +40,24 @@ func main() {
 
 	// 👤 User Routes
 	app.Get("/users", routes.GetUsers)
-	app.Post("/users/create", routes.CreateUser)
-	app.Post("/login", routes.Login)
-	app.Post("/logout", routes.Logout)
+	app.Post("/users/create", routes.CreateUser) // Needs update: Registration now just syncs user
 
 	// 🏛️ Clubs
 	app.Get("/clubs", routes.GetClubs)
-	app.Get("/clubs/:id", middleware.RequireAuth(), routes.GetClubByID)
-	app.Get("/clubs/:id/officers", middleware.RequireAuth(), routes.GetOfficersByClubID)
+	app.Get("/clubs/:id", middleware.JWTProtected(), routes.GetClubByID)
+	app.Get("/clubs/:id/officers", middleware.JWTProtected(), routes.GetOfficersByClubID)
 
 	// 📅 Events
-	app.Get("/events", middleware.RequireAuth(), routes.GetEvents)
-	app.Post("/events/send-confirmation", middleware.RequireAuth(), routes.SendRSVPConfirmation)
+	app.Get("/events", middleware.JWTProtected(), routes.GetEvents)
+	app.Post("/events/send-confirmation", middleware.JWTProtected(), routes.SendRSVPConfirmation)
 
 	// 📢 Announcements
-	app.Get("/announcements", middleware.RequireAuth(), routes.GetAnnouncements)
-	app.Post("/announcements/create", middleware.RequireAuth(), routes.CreateAnnouncement)
+	app.Get("/announcements", middleware.JWTProtected(), routes.GetAnnouncements)
+	app.Post("/announcements/create", middleware.JWTProtected(), routes.CreateAnnouncement)
 
 	// 📋 Event Permits
-	app.Post("/event-permits/submit", middleware.RequireAuth(), routes.SubmitFullEventPermit)
-	app.Get("/submissions", middleware.RequireAuth(), routes.GetUserSubmissions)
+	app.Post("/event-permits/submit", middleware.JWTProtected(), routes.SubmitFullEventPermit)
+	app.Get("/submissions", middleware.JWTProtected(), routes.GetUserSubmissions)
 
 	// 📦 Bookings
 	routes.RegisterBookingRoutes(app)

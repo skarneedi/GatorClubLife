@@ -1,23 +1,25 @@
 package testutils
 
 import (
-	"backend/middleware"
 	"backend/routes"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/session"
 )
 
-var TestStore = session.New()
+// MockAuthMiddleware sets dummy user data in context for tests
+func MockAuthMiddleware(c *fiber.Ctx) error {
+	c.Locals("user_email", "test@example.com")
+	c.Locals("user_id", uint(1))
+	c.Locals("user_role", "member")
+	return c.Next()
+}
 
+// SetupTestApp creates a fiber app for testing with mock auth
 func SetupTestApp() *fiber.App {
 	app := fiber.New()
 
-	// ⚠️ Set the session store BEFORE using SessionContext()
-	routes.SetStore(TestStore)
-	middleware.SetStore(TestStore)
-
-	app.Use(middleware.SessionContext())
+	// Apply mock auth middleware globally for tests
+	app.Use(MockAuthMiddleware)
 
 	// Setup the specific routes used in tests
 	app.Get("/clubs/:id", routes.GetClubByID)

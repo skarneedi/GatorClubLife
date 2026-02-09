@@ -34,10 +34,10 @@ func TestSubmitFullEventPermit_DBLogic(t *testing.T) {
 
 	// Seed user and prepare test data
 	user := database.User{
-		UserName:     "Permit Test",
-		UserEmail:    "permits@example.com",
-		UserPassword: "1234",
-		UserRole:     "member",
+		UserName:  "Permit Test",
+		UserEmail: "permits@example.com",
+		Auth0ID:   "auth0|1234",
+		UserRole:  "member",
 	}
 	database.DB.Create(&user)
 

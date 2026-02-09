@@ -15,8 +15,8 @@ type User struct {
 	UserName      string `gorm:"column:user_name;not null" json:"user_name"`
 	UserEmail     string `gorm:"column:user_email;unique;not null" json:"user_email"`
 	UserRole      string `gorm:"column:user_role;not null;check:(user_role IN ('admin', 'member', 'organizer'))" json:"user_role"`
+	Auth0ID       string `gorm:"column:auth0_id;unique" json:"auth0_id"`
 	UserCreatedAt int64  `gorm:"column:user_created_at;default:(strftime('%s', 'now'))" json:"user_created_at"`
-	UserPassword  string `gorm:"column:user_password;not null" json:"user_password"`
 }
 
 type Club struct {

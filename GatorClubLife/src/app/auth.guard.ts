@@ -1,27 +1,21 @@
-import { CanActivateFn } from '@angular/router';
+import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { AuthService } from '@auth0/auth0-angular';
+import { tap } from 'rxjs/operators';
 
-export const authGuard: CanActivateFn = () => {
-  // Inject Router
+export const authGuard: CanActivateFn = (route, state) => {
+  const auth = inject(AuthService);
   const router = inject(Router);
 
-  // Check if running in a browser environment
-  if (typeof window === 'undefined') {
-    // If no window object, deny access or decide accordingly.
-    console.warn('No browser environment detected. Redirecting to login.');
-    router.navigate(['/login']);
-    return false;
-  }
-
-  // Check if the user is logged in using localStorage
-  const isLoggedIn = localStorage.getItem('isLoggedIn');
-  if (isLoggedIn === 'true') {
-    return true; // Allow access if logged in.
-  } else {
-    // Redirect to login page if not logged in
-    console.warn('User not authenticated. Redirecting to login.');
-    router.navigate(['/login'], { queryParams: { returnUrl: router.url } }); // Pass the current URL as a query parameter
-    return false;
-  }
+  return auth.isAuthenticated$.pipe(
+    tap(loggedIn => {
+      if (!loggedIn) {
+        console.warn('🔒 User not authenticated. Redirecting to login.');
+        // router.navigate(['/login']); // Auth0 SDK handles redirect usually, or we can force it
+        auth.loginWithRedirect({
+          appState: { target: state.url }
+        });
+      }
+    })
+  );
 };

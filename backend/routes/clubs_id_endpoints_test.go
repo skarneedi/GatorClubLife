@@ -11,6 +11,7 @@ import (
 
 func initClubsTestDB() {
 	database.InitDB()
+	database.DB.AutoMigrate(&database.Club{}, &database.Officer{})
 	database.DB.Exec("DELETE FROM clubs")
 	database.DB.Exec("DELETE FROM officers")
 

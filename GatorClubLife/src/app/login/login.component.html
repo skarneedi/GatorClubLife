@@ -1,41 +1,16 @@
 <div class="login-container">
-  <h2>Login</h2>
-  <form (ngSubmit)="login()">
-    <!-- Email Input -->
-    <div>
-      <label for="username">Email:</label>
-      <input
-        type="text"
-        id="username"
-        [(ngModel)]="username"
-        name="username"
-        required
-      />
-      <!-- Display email-specific error -->
-      <div *ngIf="emailError" class="error">{{ emailError }}</div>
-    </div>
+  <h2>Welcome to Gator Club Life</h2>
+  
+  <div *ngIf="isLoading$ | async">
+    <p>🔄 Processing login...</p>
+  </div>
 
-    <!-- Password Input -->
-    <div>
-      <label for="password">Password:</label>
-      <input
-        type="password"
-        id="password"
-        [(ngModel)]="password"
-        name="password"
-        required
-      />
-      <!-- Display password-specific error -->
-      <div *ngIf="passwordError" class="error">{{ passwordError }}</div>
-    </div>
+  <div *ngIf="error$ | async as error" class="error-msg">
+    <p>❌ Error: {{ error.message }}</p>
+  </div>
 
-    <!-- Login Button -->
-    <button type="submit">Login</button>
-  </form>
-
-  <!-- Register Link -->
-  <div class="register-link">
-    Don't have an account?
-    <button (click)="goToRegister()" class="register-btn">Register</button>
+  <div *ngIf="!(isLoading$ | async) && !(error$ | async)">
+    <p>Please log in to continue.</p>
+    <button (click)="login()" class="auth-btn">Log In with Auth0</button>
   </div>
 </div>
