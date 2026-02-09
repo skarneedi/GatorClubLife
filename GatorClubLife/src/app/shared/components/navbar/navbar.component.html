@@ -1,0 +1,120 @@
+<nav class="bg-secondary text-white sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+
+            <!-- Logo -->
+            <div class="flex-shrink-0 flex items-center cursor-pointer" routerLink="/">
+                <span class="font-bold text-xl tracking-tight">🐊 GatorClubLife</span>
+            </div>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:block">
+                <div class="ml-10 flex items-baseline space-x-4">
+                    <a *ngFor="let link of navLinks" [routerLink]="link.path"
+                        routerLinkActive="bg-secondary-dark text-white" [routerLinkActiveOptions]="{exact: true}"
+                        class="px-3 py-2 rounded-md text-sm font-medium hover:bg-secondary-light transition-colors">
+                        {{ link.label }}
+                    </a>
+                    <a *ngIf="isAdmin" routerLink="/admin" routerLinkActive="bg-secondary-dark text-white"
+                        class="px-3 py-2 rounded-md text-sm font-medium hover:bg-secondary-light transition-colors text-yellow-300">
+                        Admin
+                    </a>
+                </div>
+            </div>
+
+            <!-- Auth Buttons (Desktop) -->
+            <div class="hidden md:block">
+                <div class="ml-4 flex items-center md:ml-6">
+                    <ng-container *ngIf="(isLoggedIn$ | async); else loginBtn">
+                        <!-- Simple Dropdown or just Dashboard for now -->
+                        <div class="relative group">
+                            <button
+                                class="flex items-center text-sm font-medium text-white hover:text-gray-200 focus:outline-none">
+                                <span>My Account</span>
+                                <svg class="ml-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                            <!-- Dropdown Menu -->
+                            <div
+                                class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block ring-1 ring-black ring-opacity-5">
+                                <a routerLink="/profile"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
+                                <a routerLink="/my-submissions"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Submissions</a>
+                                <a routerLink="/my-events"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Events</a>
+                                <a (click)="logout()"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer text-red-600">Logout</a>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-template #loginBtn>
+                        <app-button variant="primary" (click)="login()">
+                            Login
+                        </app-button>
+                    </ng-template>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="-mr-2 flex md:hidden">
+                <button (click)="toggleMobileMenu()" type="button"
+                    class="bg-secondary-light inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-secondary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-secondary focus:ring-white">
+                    <span class="sr-only">Open main menu</span>
+                    <!-- Heroicon name: menu -->
+                    <svg *ngIf="!isMobileMenuOpen" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <!-- Heroicon name: x -->
+                    <svg *ngIf="isMobileMenuOpen" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="md:hidden" [class.hidden]="!isMobileMenuOpen">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <a *ngFor="let link of navLinks" [routerLink]="link.path" (click)="closeMobileMenu()"
+                routerLinkActive="bg-secondary-dark text-white" [routerLinkActiveOptions]="{exact: true}"
+                class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary-light">
+                {{ link.label }}
+            </a>
+        </div>
+        <div class="pt-4 pb-4 border-t border-secondary-light">
+            <ng-container *ngIf="(isLoggedIn$ | async); else mobileLoginBtn">
+                <div class="px-5 space-y-2">
+                    <div class="flex items-center px-3 mb-2">
+                        <span class="text-base font-medium text-white">My Account</span>
+                    </div>
+                    <a routerLink="/profile" (click)="closeMobileMenu()"
+                        class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary-light text-gray-200 hover:text-white">My
+                        Profile</a>
+                    <a routerLink="/my-submissions" (click)="closeMobileMenu()"
+                        class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary-light text-gray-200 hover:text-white">My
+                        Submissions</a>
+                    <a routerLink="/my-events" (click)="closeMobileMenu()"
+                        class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary-light text-gray-200 hover:text-white">My
+                        Events</a>
+                    <button (click)="logout()"
+                        class="block w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-secondary-light text-red-300">Logout</button>
+                </div>
+            </ng-container>
+            <ng-template #mobileLoginBtn>
+                <div class="px-5">
+                    <app-button variant="primary" [fullWidth]="true" (click)="login()">Login</app-button>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</nav>
