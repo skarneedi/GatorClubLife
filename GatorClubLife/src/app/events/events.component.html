@@ -1,107 +1,204 @@
-<div class="events-container">
-  <h1>Upcoming Events</h1>
+<div class="min-h-screen bg-background pb-20">
 
-  <div class="search-bar">
-    <input type="text" [(ngModel)]="searchQuery" placeholder="Search by organization, title, or location..." />
-    <button (click)="applyFilters()">Search</button>
-    <button (click)="resetFilters()">Reset</button>
-  </div>
+  <!-- Header & Filters -->
+  <div class="bg-surface border-b border-border-light sticky top-16 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-  <div class="main-content">
-    <div class="sidebar">
-      <h2>Select a Date</h2>
-      <input type="date" [(ngModel)]="selectedDate" (change)="applyFilters()" />
-
-      <h2>Event Categories</h2>
-      <ul>
-        <li (click)="resetFilters()">All</li>
-        <li (click)="filterByCategory('Music/Concert')">Music/Concert</li>
-        <li (click)="filterByCategory('5k (Run/Walk)')">5k (Run/Walk)</li>
-        <li (click)="filterByCategory('Community Service')">Community Service</li>
-        <li (click)="filterByCategory('Health/Wellness')">Health/Wellness</li>
-      </ul>
-    </div>
-
-    <div class="events-grid">
-      <div class="event-card" *ngFor="let event of filteredEvents">
-        <div class="event-org">{{ event.organization }}</div>
-        <div class="event-title">{{ event.title }}</div>
-        <div class="event-meta">
-          <i class="fa fa-calendar"></i> {{ event.startDate }} – {{ event.endDate }}
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+        <div>
+          <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Discover Events</h1>
+          <p class="text-gray-500 text-sm mt-1">Find upcoming activities on campus.</p>
         </div>
-        <div class="event-meta">
-          <i class="fa fa-map-marker"></i> {{ event.location }}
+
+        <!-- Search Bar -->
+        <div class="relative w-full md:w-80 group">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400 group-focus-within:text-primary-500 transition-colors"
+              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          <input type="text" [(ngModel)]="searchQuery" (input)="applyFilters()"
+            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-xl leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition-shadow"
+            placeholder="Search events...">
         </div>
-        <div class="event-desc">{{ event.description }}</div>
-        <a class="event-link" href="#" (click)="$event.preventDefault(); openModal(event)">
-          <i class="fa fa-arrow-right"></i> Learn more
-        </a>
       </div>
+
+      <!-- Filter Chips -->
+      <div class="flex flex-wrap gap-2">
+        <button (click)="filterByCategory('All')" [class.bg-primary-500]="selectedCategory === 'All'"
+          [class.text-white]="selectedCategory === 'All'" [class.bg-white]="selectedCategory !== 'All'"
+          [class.text-gray-700]="selectedCategory !== 'All'"
+          class="px-4 py-1.5 rounded-full text-sm font-medium border border-gray-200 hover:border-primary-300 hover:text-primary-600 transition-all shadow-sm">
+          All
+        </button>
+        <button (click)="filterByCategory('Music/Concert')"
+          [class.bg-primary-500]="selectedCategory === 'Music/Concert'"
+          [class.text-white]="selectedCategory === 'Music/Concert'"
+          [class.bg-white]="selectedCategory !== 'Music/Concert'"
+          [class.text-gray-700]="selectedCategory !== 'Music/Concert'"
+          class="px-4 py-1.5 rounded-full text-sm font-medium border border-gray-200 hover:border-primary-300 hover:text-primary-600 transition-all shadow-sm">
+          🎵 Music
+        </button>
+        <button (click)="filterByCategory('5k (Run/Walk)')"
+          [class.bg-primary-500]="selectedCategory === '5k (Run/Walk)'"
+          [class.text-white]="selectedCategory === '5k (Run/Walk)'"
+          [class.bg-white]="selectedCategory !== '5k (Run/Walk)'"
+          [class.text-gray-700]="selectedCategory !== '5k (Run/Walk)'"
+          class="px-4 py-1.5 rounded-full text-sm font-medium border border-gray-200 hover:border-primary-300 hover:text-primary-600 transition-all shadow-sm">
+          🏃‍♂️ Sports
+        </button>
+        <button (click)="filterByCategory('Community Service')"
+          [class.bg-primary-500]="selectedCategory === 'Community Service'"
+          [class.text-white]="selectedCategory === 'Community Service'"
+          [class.bg-white]="selectedCategory !== 'Community Service'"
+          [class.text-gray-700]="selectedCategory !== 'Community Service'"
+          class="px-4 py-1.5 rounded-full text-sm font-medium border border-gray-200 hover:border-primary-300 hover:text-primary-600 transition-all shadow-sm">
+          🤝 Service
+        </button>
+        <button (click)="filterByCategory('Health/Wellness')"
+          [class.bg-primary-500]="selectedCategory === 'Health/Wellness'"
+          [class.text-white]="selectedCategory === 'Health/Wellness'"
+          [class.bg-white]="selectedCategory !== 'Health/Wellness'"
+          [class.text-gray-700]="selectedCategory !== 'Health/Wellness'"
+          class="px-4 py-1.5 rounded-full text-sm font-medium border border-gray-200 hover:border-primary-300 hover:text-primary-600 transition-all shadow-sm">
+          🧘 Wellness
+        </button>
+      </div>
+
     </div>
   </div>
+
+  <!-- Events Grid -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Empty State -->
+      <div *ngIf="filteredEvents.length === 0" class="col-span-full text-center py-20">
+        <div class="bg-gray-100 rounded-full h-24 w-24 flex items-center justify-center mx-auto mb-4">
+          <span class="text-4xl">🐊</span>
+        </div>
+        <h3 class="text-lg font-bold text-gray-900">No events found</h3>
+        <p class="text-gray-500">Try adjusting your filters.</p>
+        <button (click)="resetFilters()" class="mt-4 text-primary-600 font-semibold hover:underline">Clear
+          filters</button>
+      </div>
+
+      <app-card *ngFor="let event of filteredEvents" [padding]="'none'" [hoverEffects]="true"
+        class="flex flex-col h-full group">
+        <!-- Card Header Image Placeholder -->
+        <div class="h-32 bg-gradient-to-br from-indigo-50 to-blue-50 relative flex items-center justify-center">
+          <span class="text-4xl opacity-20 group-hover:scale-110 transition-transform duration-300">📅</span>
+
+          <!-- Date Badge -->
+          <div
+            class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center min-w-[3.5rem] border border-gray-100">
+            <span class="block text-xs font-bold text-gray-500 uppercase">{{ event.startDate | date:'MMM' }}</span>
+            <span class="block text-xl font-extrabold text-gray-900 leading-none">{{ event.startDate | date:'dd'
+              }}</span>
+          </div>
+        </div>
+
+        <div class="p-6 flex flex-col flex-grow">
+          <div class="mb-2">
+            <span class="text-xs font-bold text-primary-600 bg-primary-50 px-2 py-1 rounded uppercase tracking-wider">{{
+              event.category }}</span>
+          </div>
+
+          <h3 class="text-xl font-bold text-gray-900 mb-1 line-clamp-2 group-hover:text-primary-600 transition-colors">
+            {{ event.title }}</h3>
+          <p class="text-sm text-gray-500 font-medium mb-4">{{ event.organization }}</p>
+
+          <div class="space-y-2 mb-6">
+            <div class="flex items-start text-sm text-gray-600">
+              <span class="mr-2 text-primary-400">📍</span>
+              <span class="line-clamp-1">{{ event.location }}</span>
+            </div>
+            <div class="flex items-start text-sm text-gray-600">
+              <span class="mr-2 text-primary-400">⏰</span>
+              <span>{{ event.startDate | date:'shortTime' }} - {{ event.endDate | date:'shortTime' }}</span>
+            </div>
+          </div>
+
+          <div class="mt-auto">
+            <app-button variant="outline" [fullWidth]="true" size="sm" (click)="openModal(event)">
+              Details & RSVP
+            </app-button>
+          </div>
+        </div>
+      </app-card>
+    </div>
+  </div>
+
 </div>
 
 <!-- Modal -->
-<div class="modal-backdrop" *ngIf="showModal">
-  <div class="modal-content">
-    <h2 class="modal-title">Event Details: {{ selectedEvent?.title }}</h2>
+<div *ngIf="showModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+  aria-modal="true">
+  <!-- Backdrop -->
+  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" (click)="closeModal()"></div>
 
-    <div class="modal-row">
-      <div class="modal-box-row">
-        <div class="modal-icon teal"><i class="fa fa-users"></i></div>
-        <div class="modal-text">
-          <p class="label">Organization</p>
-          <p class="value">{{ selectedEvent?.organization }}</p>
+    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+    <div
+      class="relative inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full border border-gray-100">
+
+      <!-- Modal Header -->
+      <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+        <h3 class="text-lg font-bold text-gray-900">{{ selectedEvent?.title }}</h3>
+        <button (click)="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+          <span class="text-2xl">&times;</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="px-6 py-6 space-y-6">
+        <!-- Badges/Tags -->
+        <div class="flex gap-2">
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">{{
+            selectedEvent?.organization }}</span>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">{{
+            selectedEvent?.category }}</span>
+        </div>
+
+        <!-- Details Grid -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-gray-50 p-3 rounded-lg">
+            <span class="block text-xs font-medium text-gray-500 uppercase">Location</span>
+            <span class="text-sm font-semibold text-gray-900 block mt-1">{{ selectedEvent?.location }}</span>
+          </div>
+          <div class="bg-gray-50 p-3 rounded-lg">
+            <span class="block text-xs font-medium text-gray-500 uppercase">Date</span>
+            <span class="text-sm font-semibold text-gray-900 block mt-1">{{ selectedEvent?.startDate | date:'shortDate'
+              }}</span>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <h4 class="text-sm font-bold text-gray-900 mb-2">About this event</h4>
+          <p class="text-gray-600 text-sm leading-relaxed">{{ selectedEvent?.description }}</p>
+        </div>
+
+        <!-- RSVP Status -->
+        <div *ngIf="rsvpMessage" class="p-3 bg-green-50 text-green-700 text-sm rounded-lg flex items-center">
+          <span class="mr-2">✅</span> {{ rsvpMessage }}
         </div>
       </div>
 
-      <div class="modal-box-row">
-        <div class="modal-icon orange"><i class="fa fa-map-marker"></i></div>
-        <div class="modal-text">
-          <p class="label">Event Location</p>
-          <p class="value">{{ selectedEvent?.location }}</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal-row">
-      <div class="modal-box-row">
-        <div class="modal-icon green"><i class="fa fa-calendar-plus-o"></i></div>
-        <div class="modal-text">
-          <p class="label">Starts</p>
-          <p class="value">{{ selectedEvent?.startDate }}</p>
-        </div>
+      <!-- Modal Footer -->
+      <div class="bg-gray-50 px-6 py-4 flex flex-row-reverse gap-3">
+        <ng-container *ngIf="!selectedEvent?.rsvped">
+          <app-button variant="primary" (click)="rsvpToEvent()">Count me in!</app-button>
+        </ng-container>
+        <ng-container *ngIf="selectedEvent?.rsvped">
+          <app-button variant="outline" (click)="undoRSVP()" class="text-red-600 border-red-200 hover:bg-red-50">Cancel
+            RSVP</app-button>
+        </ng-container>
+        <app-button variant="ghost" (click)="closeModal()">Close</app-button>
       </div>
 
-      <div class="modal-box-row">
-        <div class="modal-icon red"><i class="fa fa-calendar-times-o"></i></div>
-        <div class="modal-text">
-          <p class="label">Ends</p>
-          <p class="value">{{ selectedEvent?.endDate }}</p>
-        </div>
-      </div>
     </div>
-
-    <div class="modal-box-row full-width">
-      <div class="modal-icon blue"><i class="fa fa-info-circle"></i></div>
-      <div class="modal-text">
-        <p class="label">Details</p>
-        <p class="description">{{ selectedEvent?.description }}</p>
-      </div>
-    </div>
-
-    <p><strong>Email:</strong> {{ userEmail }}</p>
-
-    <div *ngIf="!selectedEvent?.rsvped">
-      <button class="rsvp-btn" (click)="rsvpToEvent()">RSVP</button>
-    </div>
-
-    <div *ngIf="selectedEvent?.rsvped">
-      <button class="undo-btn" (click)="undoRSVP()">Undo RSVP</button>
-    </div>
-
-    <div *ngIf="rsvpMessage" class="rsvp-message">{{ rsvpMessage }}</div>
-
-    <button class="close-btn" (click)="closeModal()">Close</button>
   </div>
 </div>
