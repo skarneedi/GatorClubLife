@@ -1,47 +1,103 @@
-<!-- organizations.component.html -->
-<div class="container">
-  <div class="sidebar">
-    <h3>Filter by Categories</h3>
-    <div class="category-list">
-      <ul>
-        <li
-          *ngFor="let category of categories"
-          (click)="selectCategory(category)"
-          [class.active]="selectedCategory === category"
-        >
+<div class="min-h-screen bg-background py-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- Hero / Header Section -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl mb-4">
+        Find Your <span class="text-primary-600">Community</span>
+      </h1>
+      <p class="max-w-2xl mx-auto text-xl text-gray-500">
+        Discover over 1,000 student organizations at the University of Florida.
+        Connect, lead, and grow.
+      </p>
+    </div>
+
+    <!-- Controls: Search & Filter -->
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-10">
+
+      <!-- Search Input -->
+      <div class="relative w-full md:w-96">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+              clip-rule="evenodd" />
+          </svg>
+        </div>
+        <input [(ngModel)]="searchTerm" (input)="applyFilters()" type="text"
+          class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm shadow-sm transition-shadow hover:shadow-md"
+          placeholder="Search clubs, sports, interests...">
+      </div>
+
+      <!-- Category Filter Chips -->
+      <div class="flex flex-wrap justify-center gap-2">
+        <button *ngFor="let category of categories" (click)="selectCategory(category)"
+          [class.bg-primary-600]="selectedCategory === category" [class.text-white]="selectedCategory === category"
+          [class.bg-white]="selectedCategory !== category" [class.text-gray-700]="selectedCategory !== category"
+          class="px-4 py-2 rounded-full text-sm font-medium border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
           {{ category }}
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="main-content">
-    <h1>Find an organization</h1>
-    <div class="search-bar">
-      <input
-        type="text"
-        placeholder="Search by either name or keyword"
-        [(ngModel)]="searchTerm"
-        (input)="applyFilters()"
-      />
-      <span class="search-icon">🔍</span>
-    </div>
-
-    <div class="organization-list">
-      <div
-        *ngFor="let org of filteredOrganizations"
-        class="organization-card"
-      >
-        <h2>{{ org.club_name }}</h2>
-        <p>{{ org.club_description }}</p>
-        <!-- Router link to the organization details page -->
-        <a
-          [routerLink]="['/organizations', org.club_id]"
-          class="view-page-link"
-        >
-          <i class="fas fa-arrow-right"></i> View page
-        </a>
+        </button>
       </div>
     </div>
+
+    <!-- Active Filter Warning (if filters yield no results) -->
+    <div *ngIf="filteredOrganizations.length === 0 && !isLoading" class="text-center py-24">
+      <div class="text-6xl mb-4">🦕</div>
+      <h3 class="text-lg font-medium text-gray-900">No clubs found</h3>
+      <p class="text-gray-500">Try adjusting your search or filters.</p>
+      <button (click)="searchTerm = ''; selectedCategory = 'All'; applyFilters()"
+        class="mt-4 text-primary-600 font-medium hover:underline">
+        Clear all filters
+      </button>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
+      <div class="h-64 bg-gray-200 rounded-2xl"></div>
+      <div class="h-64 bg-gray-200 rounded-2xl"></div>
+      <div class="h-64 bg-gray-200 rounded-2xl"></div>
+    </div>
+
+    <!-- Clubs Grid -->
+    <div *ngIf="!isLoading && filteredOrganizations.length > 0"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <div *ngFor="let club of filteredOrganizations">
+        <app-card [hoverEffects]="true" padding="none" class="h-full flex flex-col">
+
+          <!-- Card Header / Image Placeholder -->
+          <div
+            class="h-32 bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center relative overflow-hidden">
+            <!-- If we had images, we'd use them here. For now, a nice pattern or initial icon -->
+            <span class="text-4xl filter grayscale opacity-20">🐊</span>
+            <div
+              class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-xs font-bold text-gray-700 shadow-sm">
+              {{ club.club_category }}
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="p-6 flex-1 flex flex-col">
+            <h3 class="text-xl font-bold text-gray-900 mb-2 line-clamp-1">{{ club.club_name }}</h3>
+            <p class="text-gray-600 text-sm mb-4 line-clamp-3 flex-1">
+              {{ club.club_description || 'No description provided.' }}
+            </p>
+
+            <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
+              <span class="text-xs font-medium text-gray-500 flex items-center gap-1">
+                👥 {{ club.memberCount || '10+' }} Members
+              </span>
+              <a [routerLink]="['/organizations', club.club_id]"
+                class="text-primary-600 font-semibold text-sm hover:text-primary-700 hover:underline flex items-center gap-1">
+                View Page <span class="text-xs">→</span>
+              </a>
+            </div>
+          </div>
+
+        </app-card>
+      </div>
+
+    </div>
+
   </div>
 </div>
