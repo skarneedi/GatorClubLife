@@ -1,43 +1,86 @@
-<div class="container">
-  <!-- Header Section -->
-  <header>
-    <h1>My Submissions</h1>
-  </header>
+<div class="min-h-screen bg-background py-10">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
-  <!-- Only My Permits Content -->
-  <main>
-    <section>
-      <h2>My Permits</h2>
-      <p>Want to check on the status of your permits? Look no further!</p>
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">My Submissions</h1>
+      <p class="text-gray-500 mt-2">Track the status of your event permits and requests.</p>
+    </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Permit #</th>
-            <th>Event Name</th>
-            <th>Submitter</th>
-            <th>Number of Dates</th>
-            <th>Overall Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let permit of myPermits">
-            <td>{{ permit.id }}</td>
-            <td>{{ permit.event_name }}</td>
-            <td>{{ permit.submitted_by }}</td>
-            <td>{{ permit.slot_count }}</td>
-            <td>
-              <span [ngClass]="{
-                'status-chip completed': permit.status.toLowerCase() === 'completed',
-                'status-chip pending': permit.status.toLowerCase() === 'pending',
-                'status-chip denied': permit.status.toLowerCase() === 'denied'
-              }">
-                {{ permit.status | titlecase }}
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-  </main>
+    <!-- Active Tab (Placeholder for now, consistent with UI) -->
+    <div class="flex space-x-4 border-b border-gray-200 mb-6">
+      <button class="pb-3 border-b-2 border-primary-500 text-primary-600 font-semibold text-sm">
+        My Permits
+      </button>
+      <button
+        class="pb-3 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm transition-colors">
+        Drafts
+      </button>
+      <button
+        class="pb-3 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm transition-colors">
+        History
+      </button>
+    </div>
+
+    <!-- Submissions List (Cards) -->
+    <div class="space-y-4">
+
+      <!-- Empty State -->
+      <div *ngIf="myPermits.length === 0"
+        class="text-center py-12 bg-white rounded-2xl border border-gray-200 border-dashed">
+        <div class="text-4xl mb-3">📂</div>
+        <h3 class="text-lg font-medium text-gray-900">No submissions found</h3>
+        <p class="text-gray-500 text-sm">You haven't submitted any event permits yet.</p>
+        <button
+          class="mt-4 px-4 py-2 bg-primary-500 text-white rounded-lg text-sm font-semibold hover:bg-primary-600 transition-colors">
+          Create New Permit
+        </button>
+      </div>
+
+      <!-- Card Item -->
+      <div *ngFor="let permit of myPermits"
+        class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+
+        <!-- Left: Status Icon & Details -->
+        <div class="flex items-start gap-4">
+          <!-- Status Icon/Box -->
+          <div [ngClass]="{
+            'bg-green-100 text-green-600': permit.status === 'approved' || permit.status === 'completed',
+            'bg-yellow-100 text-yellow-600': permit.status === 'pending',
+            'bg-red-100 text-red-600': permit.status === 'denied'
+          }" class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
+            <span class="text-xl" *ngIf="permit.status === 'approved' || permit.status === 'completed'">✓</span>
+            <span class="text-xl" *ngIf="permit.status === 'pending'">⏳</span>
+            <span class="text-xl" *ngIf="permit.status === 'denied'">✕</span>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-bold text-gray-900 leading-tight">{{ permit.event_name }}</h3>
+            <p class="text-sm text-gray-500 mt-1">Submitted by <span class="font-medium text-gray-700">{{
+                permit.submitted_by }}</span> • ID: #{{ permit.id }}</p>
+            <div class="mt-2 text-xs text-gray-400">
+              {{ permit.slot_count }} Date(s) Requested
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Badge & Action -->
+        <div class="flex flex-row sm:flex-col items-center sm:items-end gap-3 sm:gap-1">
+          <span [ngClass]="{
+            'bg-green-100 text-green-700': permit.status === 'approved' || permit.status === 'completed',
+            'bg-yellow-100 text-yellow-700': permit.status === 'pending',
+            'bg-red-100 text-red-700': permit.status === 'denied'
+          }" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide">
+            {{ permit.status | titlecase }}
+          </span>
+
+          <button class="text-sm font-medium text-primary-600 hover:text-primary-700 hover:underline mt-1">
+            View Details &rarr;
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
 </div>

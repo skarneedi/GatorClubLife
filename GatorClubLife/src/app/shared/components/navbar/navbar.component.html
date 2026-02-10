@@ -38,33 +38,36 @@
 
                 <!-- Auth State -->
                 <ng-container *ngIf="(isLoggedIn$ | async); else loginBtn">
-                    <div class="relative group">
+                    <div class="relative">
                         <!-- Avatar Circle Button -->
-                        <button
-                            class="flex items-center justify-center w-10 h-10 rounded-full bg-secondary-100 text-secondary-700 hover:ring-2 hover:ring-secondary-300 transition-all focus:outline-none overflow-hidden">
+                        <button (click)="toggleUserMenu()"
+                            class="flex items-center justify-center w-10 h-10 rounded-full bg-secondary-100 text-secondary-700 hover:ring-2 hover:ring-secondary-300 transition-all focus:outline-none overflow-hidden relative z-50">
                             <!-- Use user photo if available, else initials -->
                             <span class="font-bold text-sm">GC</span>
-                            <!-- <img [src]="userPhoto" class="w-full h-full object-cover"> -->
                         </button>
 
+                        <!-- Invisible Backdrop to close menu -->
+                        <div *ngIf="isUserMenuOpen" (click)="closeUserMenu()"
+                            class="fixed inset-0 z-40 bg-transparent cursor-default"></div>
+
                         <!-- Dropdown Menu -->
-                        <div
-                            class="absolute right-0 mt-2 w-56 bg-surface rounded-xl shadow-xl py-2 hidden group-hover:block border border-border-light animation-fade-in-up">
+                        <div *ngIf="isUserMenuOpen"
+                            class="absolute right-0 mt-2 w-56 bg-surface rounded-xl shadow-xl py-2 border border-border-light animation-fade-in-up z-50">
                             <div class="px-4 py-2 border-b border-gray-100">
                                 <p class="text-sm font-semibold text-gray-900">Signed in as</p>
                                 <p class="text-xs text-gray-500 truncate">gator&#64;ufl.edu</p>
                             </div>
-                            <a routerLink="/profile"
+                            <a routerLink="/profile" (click)="closeUserMenu()"
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-600">My
                                 Profile</a>
-                            <a routerLink="/my-submissions"
+                            <a routerLink="/my-submissions" (click)="closeUserMenu()"
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-600">My
                                 Submissions</a>
-                            <a routerLink="/my-events"
+                            <a routerLink="/my-events" (click)="closeUserMenu()"
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-600">My
                                 Events</a>
                             <div class="border-t border-gray-100 my-1"></div>
-                            <a (click)="logout()"
+                            <a (click)="logout(); closeUserMenu()"
                                 class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 cursor-pointer">Logout</a>
                         </div>
                     </div>

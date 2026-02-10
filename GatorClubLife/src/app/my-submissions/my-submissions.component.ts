@@ -22,7 +22,7 @@ export class MySubmissionsComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadMyPermits();
@@ -33,15 +33,24 @@ export class MySubmissionsComponent implements OnInit {
   }
 
   loadMyPermits() {
+    const mockPermits = [
+      { id: 101, event_name: 'Gator Robotics Showcase', submitted_by: 'Albert Gator', slot_count: 1, status: 'approved' },
+      { id: 102, event_name: 'Midnight Breakfast', submitted_by: 'Albert Gator', slot_count: 2, status: 'pending' },
+      { id: 103, event_name: 'Lake Alice Picnic', submitted_by: 'Albert Gator', slot_count: 1, status: 'denied' },
+      { id: 104, event_name: 'Study Marathon', submitted_by: 'Albert Gator', slot_count: 3, status: 'completed' }
+    ];
+
     this.http.get<any[]>('http://localhost:8080/submissions', {
       withCredentials: true
     }).subscribe({
       next: (data) => {
         console.log("Loaded permits:", data);
-        this.myPermits = data;
+        this.myPermits = data.length ? data : mockPermits;
       },
       error: (err) => {
         console.error('Failed to load permits:', err);
+        // Fallback to mock data for demo
+        this.myPermits = mockPermits;
       }
     });
   }

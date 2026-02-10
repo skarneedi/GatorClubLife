@@ -1,22 +1,76 @@
-<div class="profile-card">
-    <h2>{{ user?.name }}</h2>
-  
-    <div class="profile-info">
-      <p><strong>Email:</strong> {{ user?.email }}</p>
-      <p><strong>Role:</strong> {{ user?.role }}</p>
-      <p><strong>Member Since:</strong> {{ user?.joined }}</p>
-      <p><strong>Phone:</strong> {{ user?.phone || 'Not Provided' }}</p>
+<div class="min-h-screen bg-background py-10 flex items-center justify-center px-4">
+
+  <div class="bg-white max-w-lg w-full rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+
+    <!-- Profile Header Background -->
+    <div class="h-32 bg-gradient-to-r from-primary-500 to-primary-600 relative">
+      <div class="absolute -bottom-10 left-8">
+        <div class="h-24 w-24 rounded-2xl bg-white p-1 shadow-md">
+          <div class="h-full w-full bg-gray-100 rounded-xl flex items-center justify-center text-3xl">
+            👤
+          </div>
+        </div>
+      </div>
     </div>
-  
-    <button class="edit-btn" (click)="toggleEdit()" *ngIf="!isEditing">Edit Profile</button>
-  
-    <div *ngIf="isEditing" class="edit-section">
-      <label>
-        Phone Number:
-        <input [(ngModel)]="editablePhone" type="text" />
-      </label>
-      <button class="save-btn" (click)="saveChanges()">Save</button>
-      <button class="cancel-btn" (click)="toggleEdit()">Cancel</button>
+
+    <!-- Profile Content -->
+    <div class="pt-12 px-8 pb-8">
+
+      <div class="flex justify-between items-start mb-4">
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900">{{ user?.name || 'Gator Student' }}</h2>
+          <p class="text-primary-600 font-medium">{{ user?.role || 'Member' }}</p>
+        </div>
+        <button (click)="toggleEdit()" *ngIf="!isEditing"
+          class="text-sm font-semibold text-gray-500 hover:text-primary-600 border border-gray-200 px-3 py-1.5 rounded-lg hover:border-primary-200 transition-all shadow-sm">
+          Edit Profile
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+          <span class="text-gray-400">📧</span>
+          <div>
+            <p class="text-xs font-bold text-gray-400 uppercase">Email</p>
+            <p class="text-sm font-medium text-gray-900">{{ user?.email || 'N/A' }}</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+          <span class="text-gray-400">📅</span>
+          <div>
+            <p class="text-xs font-bold text-gray-400 uppercase">Member Since</p>
+            <p class="text-sm font-medium text-gray-900">{{ user?.joined || 'N/A' }}</p>
+          </div>
+        </div>
+
+        <!-- Editable Phone Field -->
+        <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl transition-colors" [class.bg-blue-50]="isEditing">
+          <span class="text-gray-400">📱</span>
+          <div class="w-full">
+            <p class="text-xs font-bold text-gray-400 uppercase">Phone</p>
+
+            <ng-container *ngIf="!isEditing">
+              <p class="text-sm font-medium text-gray-900">{{ user?.phone || 'Not Provided' }}</p>
+            </ng-container>
+
+            <ng-container *ngIf="isEditing">
+              <input [(ngModel)]="editablePhone" type="text"
+                class="w-full mt-1 px-2 py-1 border border-primary-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                placeholder="Enter phone number">
+
+              <div class="flex gap-2 mt-2 justify-end">
+                <button (click)="saveChanges()"
+                  class="px-3 py-1 bg-primary-500 text-white text-xs font-bold rounded hover:bg-primary-600">Save</button>
+                <button (click)="toggleEdit()"
+                  class="px-3 py-1 bg-white border border-gray-300 text-gray-600 text-xs font-bold rounded hover:bg-gray-50">Cancel</button>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
-  
+
+</div>
