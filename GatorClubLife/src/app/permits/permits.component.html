@@ -1,67 +1,63 @@
-<div class="container">
-  <!-- Header Section -->
-  <header>
-    <h1>Welcome!</h1>
-    <div class="welcome-text">
-      <p>Submitting an event permit to Business Affairs is simple and should take no longer than 10 minutes to complete.</p>
-      <p>Permits should be applied for at least two weeks prior to the date of the event.</p>
-      <p><strong>Are you a Registered Student Organization?</strong> If you are, please use the <a href="#">Student Engagement Permit Request System</a>.</p>
+<div class="min-h-screen bg-background py-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- Hero Section -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl mb-4">
+        Event Permit <span class="text-primary-600">Center</span>
+      </h1>
+      <p class="max-w-2xl mx-auto text-xl text-gray-500">
+        Planning an event? Find the right permit application below.
+        <br>
+        <span class="text-sm bg-yellow-100 text-yellow-800 px-2 py-1 rounded-md mt-2 inline-block">
+          ⚠️ Please apply at least 2 weeks in advance.
+        </span>
+      </p>
     </div>
-  </header>
 
-  <!-- Content Wrapper -->
-  <div class="content-wrapper">
-    <!-- Event Types Section -->
-    <section class="event-types">
-      <h2>Choose the type of event</h2>
-      <div class="event-options">
-        <!-- Banner Permit -->
-        <div class="event-option" (click)="navigateToForm('banner-permit')">
-          <h3>Banner Permit - BA</h3>
-          <p>This form is required for placing banners on campus.</p>
-        </div>
-        <!-- Century Tower Lighting -->
-        <div class="event-option" (click)="navigateToForm('century-tower-lighting')">
-          <h3>Century Tower Lighting - BA</h3>
-          <p>This form is required for lighting Century Tower.</p>
-        </div>
-        <!-- General Events -->
-        <div class="event-option" (click)="navigateToForm('general-events')">
-          <h3>General Events - BA</h3>
-          <p>This form is required for general events and requests to serve alcohol at events ON campus.</p>
-        </div>
-        <!-- Run/Walk -->
-        <div class="event-option" (click)="navigateToForm('run-walk')">
-          <h3>Run/Walk - BA</h3>
-          <p>This form is required for runs, walks, and biking events on campus.</p>
-        </div>
-        <!-- Select Spaces -->
-        <div class="event-option" (click)="navigateToForm('select-spaces')">
-          <h3>Select Spaces: Request to Serve Alcoholic Beverages - BA</h3>
-          <p>This form is for requests to alcoholic beverages in Select Spaces. Unless your event occurs in a Select Space, please complete the General Events form.</p>
-        </div>
-        <!-- Tabling -->
-        <div class="event-option" (click)="navigateToForm('tabling')">
-          <h3>Tabling - BA</h3>
-          <p>This form is required for tabling events.</p>
-        </div>
-        <!-- Yard Sign and Feather Banner -->
-        <div class="event-option" (click)="navigateToForm('yard-sign')">
-          <h3>Yard Sign and Feather Banner Permit - BA</h3>
-          <p>This form is required for placing yard signs and feather banners on campus.</p>
-        </div>
-      </div>
-    </section>
+    <!-- Active Requests Widget (Mock Placeholder for "My Permits") -->
+    <!-- Ideally this would check if user has active permits and show them here -->
 
-    <!-- Sidebar for Type of Permit -->
-    <aside class="sidebar">
-      <h4>Type of Permit</h4>
-      <ul>
-        <li><input type="radio" name="permitType" value="basicInfo"> Basic Information</li>
-        <li><input type="radio" name="permitType" value="eventDates"> Event Dates</li>
-        <li><input type="radio" name="permitType" value="additionalForms"> Additional Forms</li>
-        <li><input type="radio" name="permitType" value="review"> Review</li>
-      </ul>
-    </aside>
+    <!-- Permits Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <app-card *ngFor="let permit of permitTypes" [hoverEffects]="true" padding="lg"
+        class="flex flex-col h-full cursor-pointer group" (click)="navigateToForm(permit.id)">
+        <div class="flex items-start justify-between mb-4">
+          <div
+            class="h-12 w-12 rounded-xl bg-primary-50 flex items-center justify-center text-3xl shadow-sm group-hover:bg-primary-100 transition-colors">
+            {{ permit.icon }}
+          </div>
+          <span class="px-2 py-1 rounded text-xs font-bold bg-gray-100 text-gray-600">
+            {{ permit.category }}
+          </span>
+        </div>
+
+        <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
+          {{ permit.title }}
+        </h3>
+
+        <p class="text-gray-500 text-sm mb-6 flex-1">
+          {{ permit.description }}
+        </p>
+
+        <div class="mt-auto">
+          <button
+            class="w-full py-2 flex items-center justify-center gap-2 text-primary-600 font-bold text-sm bg-primary-50 rounded-lg group-hover:bg-primary-600 group-hover:text-white transition-all duration-200">
+            Start Application <span>→</span>
+          </button>
+        </div>
+      </app-card>
+
+    </div>
+
+    <!-- Help Section -->
+    <div class="mt-16 text-center border-t border-gray-200 pt-8">
+      <p class="text-gray-500">
+        Are you a Registered Student Organization? Check the
+        <a href="#" class="text-primary-600 font-semibold hover:underline">Student Engagement System</a>.
+      </p>
+    </div>
+
   </div>
 </div>
