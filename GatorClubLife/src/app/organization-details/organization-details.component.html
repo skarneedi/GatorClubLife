@@ -1,61 +1,156 @@
-<!-- organization-details.component.html -->
-<div class="container" *ngIf="organization.name">
-  <div class="sidebar">
-    <header>
-      <h1>{{ organization.name }}</h1>
-    </header>
+<div class="min-h-screen bg-background pb-20">
 
-    <button class="follow-btn">Follow this Organization</button>
-    <button class="contact-btn">Contact this Organization</button>
-
-    <h3>Officers & Advisors</h3>
-    <ul *ngIf="officers.length; else noOfficers">
-      <li *ngFor="let officer of officers">
-        <span>{{ officer.name }}</span> — <span>{{ officer.role }}</span>
-      </li>
-    </ul>
-    <ng-template #noOfficers>
-      <p>No officers available for this organization.</p>
-    </ng-template>
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex items-center justify-center py-20">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
   </div>
 
-  <main class="main-content">
-    <section class="purpose">
-      <h2>Purpose</h2>
-      <p>{{ organization.description || 'No description available.' }}</p>
-    </section>
+  <div *ngIf="!isLoading && organization.name" class="animate-fade-in-up">
 
-    <section class="announcements">
-      <h2>Announcements</h2>
-      <div *ngIf="announcements.length; else noAnnouncements">
-        <ul>
-          <li *ngFor="let a of announcements">
-            <strong>{{ a.announcement_title }}</strong>: {{ a.announcement_message }}
-          </li>
-        </ul>
+    <!-- Hero Header -->
+    <div class="bg-white border-b border-gray-200">
+      <!-- Cover Image Placeholder -->
+      <div class="h-48 md:h-64 bg-gradient-to-r from-primary-600 to-secondary-500 w-full relative">
+        <div class="absolute inset-0 bg-black/20"></div>
       </div>
-      <ng-template #noAnnouncements>
-        <p>There are no upcoming announcements.</p>
-      </ng-template>
-    </section>
 
-    <section class="events">
-      <h2>Events</h2>
-      <div *ngIf="events.length; else noEvents">
-        <ul>
-          <li *ngFor="let event of events">
-            <strong>{{ event.event_name }}</strong>: {{ event.event_description }}
-          </li>
-        </ul>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative -mt-16 pb-8">
+        <div class="flex flex-col md:flex-row items-center md:items-end gap-6 text-center md:text-left">
+
+          <!-- Profile Image -->
+          <div class="h-32 w-32 rounded-2xl bg-white p-1 shadow-lg flex-shrink-0">
+            <img [src]="organization.image" alt="Logo" class="w-full h-full rounded-xl object-cover bg-gray-100">
+          </div>
+
+          <!-- Org Data -->
+          <div class="flex-1 mb-2">
+            <div class="flex items-center justify-center md:justify-start gap-2 mb-1">
+              <span
+                class="px-2.5 py-0.5 rounded-full bg-secondary-100 text-secondary-800 text-xs font-bold uppercase tracking-wide">
+                {{ organization.category }}
+              </span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight">
+              {{ organization.name }}
+            </h1>
+            <p class="text-gray-500 mt-1 max-w-2xl text-sm md:text-base">
+              Connect with us to stay updated on our latest events and announcements.
+            </p>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex flex-col sm:flex-row gap-3">
+            <app-button variant="primary" size="md">
+              Follow Organization
+            </app-button>
+            <app-button variant="outline" size="md">
+              Contact
+            </app-button>
+          </div>
+        </div>
       </div>
-      <ng-template #noEvents>
-        <p>There are no upcoming events.</p>
-      </ng-template>
-    </section>
-  </main>
-</div>
+    </div>
 
-<!-- Optional fallback -->
-<div *ngIf="!organization.name">
-  <p>Loading organization details...</p>
+    <!-- Main Content Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+      <!-- Left Column: About & Officers -->
+      <div class="lg:col-span-2 space-y-8">
+
+        <!-- About Section -->
+        <section>
+          <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            ℹ️ About Us
+          </h2>
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-gray-700 leading-relaxed">
+            {{ organization.description || 'No description available available.' }}
+          </div>
+        </section>
+
+        <!-- Announcements Section -->
+        <section>
+          <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            📢 Announcements
+          </h2>
+          <div *ngIf="announcements.length; else noAnnouncements" class="space-y-4">
+            <div *ngFor="let a of announcements" class="bg-blue-50 border-l-4 border-primary-500 p-4 rounded-r-xl">
+              <h3 class="font-bold text-gray-900">{{ a.announcement_title }}</h3>
+              <p class="text-gray-600 mt-1 text-sm">{{ a.announcement_message }}</p>
+            </div>
+          </div>
+          <ng-template #noAnnouncements>
+            <div class="bg-gray-50 rounded-xl p-6 text-center text-gray-500 border border-gray-100 border-dashed">
+              No active announcements.
+            </div>
+          </ng-template>
+        </section>
+
+        <!-- Events Section -->
+        <section>
+          <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            🗓️ Upcoming Events
+          </h2>
+          <div *ngIf="events.length; else noEvents" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <app-card *ngFor="let event of events" [hoverEffects]="true" padding="md">
+              <div class="text-xs font-bold text-primary-600 uppercase mb-1">{{ event.event_date || 'TBA' }}</div>
+              <h3 class="font-bold text-gray-900 mb-1">{{ event.event_name }}</h3>
+              <p class="text-xs text-gray-500 line-clamp-2">{{ event.event_description }}</p>
+            </app-card>
+          </div>
+          <ng-template #noEvents>
+            <div class="bg-gray-50 rounded-xl p-6 text-center text-gray-500 border border-gray-100 border-dashed">
+              No upcoming events scheduled.
+            </div>
+          </ng-template>
+        </section>
+
+      </div>
+
+      <!-- Right Column: Officers / Sidebar Info -->
+      <div class="space-y-8">
+
+        <section>
+          <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            👥 Leadership
+          </h2>
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div *ngIf="officers.length; else noOfficers">
+              <div *ngFor="let officer of officers"
+                class="flex items-center gap-3 p-4 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors">
+                <div
+                  class="h-10 w-10 rounded-full bg-secondary-100 flex items-center justify-center text-secondary-700 font-bold text-sm">
+                  {{ officer.name.charAt(0) }}
+                </div>
+                <div>
+                  <p class="text-sm font-bold text-gray-900">{{ officer.name }}</p>
+                  <p class="text-xs text-gray-500 uppercase tracking-wide">{{ officer.role }}</p>
+                </div>
+              </div>
+            </div>
+            <ng-template #noOfficers>
+              <div class="p-6 text-center text-gray-500 text-sm">
+                No officers listed.
+              </div>
+            </ng-template>
+          </div>
+        </section>
+
+        <!-- Quick Stats / Info Widget -->
+        <div class="bg-primary-900 rounded-2xl p-6 text-white bg-[url('/assets/pattern.svg')]">
+          <h3 class="font-bold text-lg mb-2">Want to join?</h3>
+          <p class="text-primary-100 text-sm mb-4">
+            Applications for new members open every semester. Contact us for more info!
+          </p>
+          <button
+            class="w-full py-2 bg-white text-primary-900 rounded-lg text-sm font-bold hover:bg-gray-100 transition-colors">
+            Apply Now
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </div>
